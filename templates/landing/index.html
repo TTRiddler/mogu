@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    Mogu.su - Сервис услуг
+{% endblock title %}
+
+
+{% block content %}
+    <div class="index-block">
+        <div class="container">
+            <h2>Здесь люди, которые могут!</h2>
+            <div class="search-block">
+                <form action="">
+                    <div class="row">
+                        <img src="{% static 'images/logo.png' %}" alt="main-logo">
+                        <input id="main-search" type="text" placeholder="Объявлений на сайте: 0">
+                        <select name="city-select" id="city-select">
+                            <option value="1">Краснодар</option>
+                            <option value="1">Майкоп</option>
+                        </select>
+                        <button type="submit">Найти</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="container">
+            <div class="services-list">
+                <div class="service-item">
+                    <div class="row">   
+                        <img src="{% static 'images/service_image.jpg' %}" alt="service-photo">
+                        <div class="service-info">
+                            <h3><a href="#">Название объявления</a></h3>
+                            <p class="price">36 000 &#8381;</p>
+                            <a href="#">Категория</a>
+                            <p><span>28.10.2019</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <div class="row">
+                        <img src="{% static 'images/service_image.jpg' %}" alt="service-photo">
+                        <div class="service-info">
+                            <h3><a href="#">Название объявления</a></h3>
+                            <p class="price">36 000 &#8381;</p>
+                            <a href="#">Категория</a>
+                            <p><span>28.10.2019</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <div class="row">
+                        <img src="{% static 'images/service_image.jpg' %}" alt="service-photo">
+                        <div class="service-info">
+                            <h3><a href="#">Название объявления</a></h3>
+                            <p class="price">36 000 &#8381;</p>
+                            <a href="#">Категория</a>
+                            <p><span>28.10.2019</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="service-item">
+                    <div class="row">
+                        <img src="{% static 'images/service_image.jpg' %}" alt="service-photo">
+                        <div class="service-info">
+                            <h3><a href="#">Название объявления</a></h3>
+                            <p class="price">36 000 &#8381;</p>
+                            <a href="#">Категория</a>
+                            <p><span>28.10.2019</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

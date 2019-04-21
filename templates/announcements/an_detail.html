@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load imagefit %}
+
+
+{% block title %}
+    {{ announcement.name }}
+{% endblock title %}
+
+
+{% block content %}
+    <div class="an-detail">
+        <div class="container">
+            <div class="row">
+                <div class="an-images">
+                    <div class="slider-for">
+                        {% for item in announcement.images.all %}
+                            <div>
+                                <div class="image-div">
+                                    <img src="{{ item.image.url|resize:'500x300,C' }}" alt="an_image">
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="slider-nav">
+                        {% for item in announcement.images.all %}
+                            <div>
+                                <div class="image-div">
+                                    <img src="{{ item.image.url|resize:'110x70,C' }}" alt="an_image">
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="an-info">
+                    <h2>{{ announcement.name }}</h2>
+                    <p class="an-price">{{ announcement.price }} &#8381;</p>
+                    <p><span>Размещено:</span> {{ announcement.posted }}</p>
+                    <p><span>Просмотры:</span> {{ announcement.views }}<span>, сегодня:</span> {{ announcement.views }}</p>
+                    <p><span>Адресс:</span> {{ announcement.address }}</p>
+                    <a class="an-phone trigger-phone" href="#">Номер телефона</a>
+                    <p class="an-user-name">{{ announcement.author.last_name }} {{ announcement.author.first_name }}</p>
+                    <p class="an-passport"><span>Паспорт надежности:</span> <i class="fa fa-star"></i> <span class="an-plus">+5</span>, <span class="an-minus">-3</span></p>
+                    <p><span>Объявления пользователя:</span> 2</p>
+                    <form action="" class="add-to-favorite">
+                        <button type="submit"><i class="far fa-heart"></i> Добавить в избранное</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="an-desc">
+                {{ announcement.desc|safe }}
+            </div>
+            <div class="an-social">
+                <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+                <script src="//yastatic.net/share2/share.js"></script>
+                <div class="ya-share2" data-services="vkontakte,facebook,odnoklassniki,moimir"></div>
+            </div>
+
+            <div class="modal-wrapper" id="modal-phone">
+                <div class="modal">
+                    <div class="modal-head">
+                        <p class="an-phone-info">Обязательно скажите, что вы нашли этот номер на сервисе <b>Могу</b></p>
+                        <h3 unselectable="on">{{ announcement.username.email }}8 (918) 421-12-12</h3>
+                        <a class="btn-close trigger-phone" href="#">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                    <div class="content">
+                        <p class="if-not-reg" unselectable="on">{{ announcement.author.last_name }} {{ announcement.author.first_name }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    Размещение услуги
+{% endblock title %}
+
+
+{% block content %}
+    <div class="container">
+        <form id="add_new_an" action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <p>Выберите категорию:</p>
+                <select name="select_service" id="select_service">
+                    <optgroup>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </optgroup>
+                    <optgroup>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="row">
+                <p>Описание объявления:</p>
+                <textarea cols="30" rows="10"></textarea>
+            </div>
+            <div class="row">
+                <p>Стоимость услуги:</p>
+                <div class="price-add">
+                    <input type="text" placeholder="Цена в &#8381;">
+                </div>
+            </div>
+            <div class="row">
+                <p>Фотографии:</p>
+                <div class="files-add">
+                    <label class="label">
+                        <i class="fa fa-upload"></i>
+                        <span class="title">Выберите фотографии<br>(не больше 10)</span>
+                        <input type="file" multiple accept="image/gif,image/jpeg,image/png">
+                    </label>
+                    <div class="file-add-res">
+
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <p>Адресс:</p>
+                <input type="text">   
+            </div>
+            <div class="row">
+                <p>Контактное лицо:</p>
+                <input type="text">
+            </div>
+            <div class="row">
+                <p>Телефон:</p>
+                <input id="phone-add" type="text">
+            </div>
+            <button type="submit">Разместить</button>
+        </form>
+    </div>
+{% endblock content %}
