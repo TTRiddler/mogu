@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 
 {% block title %}
@@ -7,25 +8,33 @@
 
 
 {% block content %}
+    <script src="{% static 'js/ckeditor/ckeditor.js' %}"></script>
     <div class="container">
         <form id="add_new_an" action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
                 <p>Выберите категорию:</p>
+                <!-- <form action=""></form> -->
+                <select data-url="{% url 'service_choice' %}" name="select_service" id="select_service_type">
+                    {% for service_type in service_types %}
+                        <option value="{{ service_type.id }}">{{ service_type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row">
+                <p>Выберите услугу:</p>
                 <select name="select_service" id="select_service">
-                    <optgroup>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </optgroup>
-                    <optgroup>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                    </optgroup>
+                    {% for service in services_start %}
+                        <option value="{{ service.id }}">{{ service.name }}</option>
+                    {% endfor %}
                 </select>
             </div>
             <div class="row">
                 <p>Описание объявления:</p>
-                <textarea cols="30" rows="10"></textarea>
+                <textarea id="an_description" cols="30" rows="10"></textarea>
+                <script>
+                    CKEDITOR.replace( 'an_description' );
+                </script>
             </div>
             <div class="row">
                 <p>Стоимость услуги:</p>

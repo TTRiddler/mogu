@@ -12,6 +12,7 @@ urlpatterns = [
     path('imagefit/', include('imagefit.urls')),
     path('', include('landing.urls')),
     path('announcements/', include('announcements.urls')),
+    path('accounts/', include('profiles.urls')),
 ]
 
 

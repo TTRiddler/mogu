@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'landing',
     'services',
     'announcements',
+    'profiles',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +59,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'profiles.context_processors.getting_forms',
             ],
         },
     },
@@ -110,6 +112,9 @@ USE_L10N = True
 USE_TZ = True
 
 
+AUTH_USER_MODEL = 'profiles.User'
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -119,6 +124,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'goga23d@gmail.com'
+EMAIL_HOST_PASSWORD = 'khysaqitvdnqtneg'
 
 
 CKEDITOR_CONFIGS = {

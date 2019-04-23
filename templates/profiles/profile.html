@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load imagefit %}
+
+
+{% block title %}
+    Личный кабинет
+{% endblock title %}
+
+
+{% block content %}
+    <div class="profile">
+        <div class="container">
+            <div class="row">
+                {% if user.photo %}
+                    <img id="user-photo" src="{{ user.photo.url|resize:'200x200,C' }}" alt="user-photo">
+                {% else %}
+                    <img id="user-photo" src="{% static 'images/no_avatar.png' %}" alt="user-photo">
+                {% endif %}
+                <div class="profile-info">
+                    <h3>{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</h3>
+                    <p class="an-passport"><span>Паспорт надежности:</span> <i class="fa fa-star"></i> <span class="an-plus">+5</span>, <span class="an-minus">-3</span></p>
+                    <p>Личный код: <span>{{ user.id }}</span></p>
+                    <a href="{% url 'an_create' %}">Разместить услугу</a>
+                </div>
+            </div>
+            <h3>Мои объявления</h3>
+            <div id="an-type-link">
+                <a class="an-link-1 an-active-link" href="#">Активные</a> / 
+                <a class="an-link-2" href="#">Архив</a>
+            </div>
+            <div class="an-list">
+                <div class="an-tab-1">
+                    {% for an in active_ans %}
+                        <div class="an-item">
+                            <div class="row">
+                                <div>
+                                    <div class="row">
+                                        <img src="{{ an.get_main_image.image.url|resize:'200x160,C' }}" alt="service-photo">
+                                        <div class="user-an-info">
+                                            <h4><a href="#">{{ an.name|truncatechars:50 }}</a></h4>
+                                            <p class="price">{{ an.price }} &#8381;</p>
+                                            <a class="s-type" href="#">{{ an.service.service_type.name }}</a>
+                                            <p><span>{{ an.address }}</span></p>
+                                            <p><span>{{ an.posted }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="an-controls">
+                                    <a href="#">Редактировать</a>
+                                    <a href="#">Удалить в архив</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="an-tab-2" style="display: none;">
+                    {% for an in not_active_ans %}
+                        <div class="an-item">
+                            <div class="row">
+                                <div>
+                                    <div class="row">
+                                        <img src="{{ an.get_main_image.image.url|resize:'200x160,C' }}" alt="service-photo">
+                                        <div class="user-an-info">
+                                            <h4><a href="#">{{ an.name|truncatechars:50 }}</a></h4>
+                                            <p class="price">{{ an.price }} &#8381;</p>
+                                            <a class="s-type" href="#">{{ an.service.service_type.name }}</a>
+                                            <p><span>{{ an.address }}</span></p>
+                                            <p><span>{{ an.posted }}</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="an-controls">
+                                    <a href="#">Редактировать</a>
+                                    <a href="#">Сделать активным</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

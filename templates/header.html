@@ -11,16 +11,21 @@
             <div class="right-header">
                 {% if user.is_authenticated %}
                     <a class="add-service" href="{% url 'an_create' %}">Разместить услугу</a>
-                    <span class="user-name">{{ user.last_name}} {{user.first_name }}</span>
+                    <a id="user-name" href="#">{{ user.first_name }} {{ user.last_name }}</a>
+                    <div class="d-none" id="profile-links">
+                        <a href="{% url 'profile' %}">Личный кабинет</a>
+                        <hr>
+                        <a href="{% url 'logout' %}">Выйти</a>
+                    </div>
                 {% else %}
                     <a class="add-service trigger" href="#">Разместить услугу</a>
-                    <a class="login-btn trigger1" href="#">Войти</a>
+                    <a class="login-btn trigger" href="#">Войти</a>
                 {% endif %}
             </div>
         </div>
     </div>
 
-    <div class="modal-wrapper" id="modal-add-service">
+    <div class="modal-wrapper" id="modal-login">
         <div class="modal">
             <div class="modal-head">
                 <img src="{% static 'images/modal-logo.png' %}" alt="">
@@ -32,9 +37,14 @@
             <div class="content">
                 <p class="modal-info"><i class="fa fa-info-circle" aria-hidden="true"></i> Чтобы разместить объявление, необходимо войти!</p>
                 <p class="if-not-reg">Если вас нет в сервисе <b>Могу</b>, вы можете <a id="register" href="#" class="trigger3">Зарегистрироваться</a></p>
-                <form action="" class="modalform">
-                    <input class="phone" type="text" placeholder="Телефон">
-                    <input type="password" placeholder="Пароль">
+                <form action="{% url 'login' %}" class="modalform" method="POST">
+                    {% csrf_token %}
+                    {% for field in login_form %}
+                        {{ field }}
+                    {% endfor %}
+                    {% for error in login_form.non_field_errors %}
+                        <div class="form-error">{{ error|escape }}</div>
+                    {% endfor %}
                     <hr>
                     <button type="submit">Войти</button>
                 </form>
@@ -42,28 +52,11 @@
             </div>
         </div>
     </div>
-
-    <div class="modal-wrapper" id="modal-login">
-        <div class="modal">
-            <div class="modal-head">
-                <img src="{% static 'images/modal-logo.png' %}" alt="">
-                <a class="btn-close trigger1" href="#">
-                    <i class="fa fa-times" aria-hidden="true"></i>
-                </a>
-                <h3>Вход в личный кабинет:</h3>
-            </div>
-            <div class="content">
-                <p class="if-not-reg">Если вас нет в сервисе <b>Могу</b>, вы можете <a id="register" class="trigger3" href="#">Зарегистрироваться</a></p>
-                <form action="" class="modalform">
-                    <input class="phone" type="text" placeholder="Телефон">
-                    <input type="password" placeholder="Пароль">
-                    <hr>
-                    <button type="submit">Войти</button>
-                </form>
-                <p class="modal-copyright">При входе вы подтверждаете согласие с <a href="#">условиями использования</a> Mogu.su и <a href="#">политикой о данных пользователей</a>.</p>
-            </div>
-        </div>
-    </div>
+    <script>
+        if ('{{ login_success }}'==='False') {
+            $('#modal-login').addClass('open');
+        }
+    </script>
 
     <div class="modal-wrapper" id="modal-register">
         <div class="modal">
@@ -76,18 +69,23 @@
             </div>
             <div class="content">
                 <p class="if-not-reg">Добро пожаловать в <b>Могу</b>! Мы рады приветствовать Вас. Для того чтобы быть с нами, заполните несколько полей и нажмите на кнопку "Регистрация"!</p>
-                <form action="" class="modalform">
-                    <input type="text" placeholder="Имя">
-                    <input type="text" placeholder="Фамилия">
-                    <input type="text" placeholder="Отчество">
-                    <input class="phone" type="text" placeholder="Телефон">
-                    <input type="email" placeholder="Почта">
-                    <input type="password" placeholder="Пароль">
-                    <input type="password" placeholder="Подтверждение пароля">
+                <form novalidate action="{% url 'register' %}" class="modalform" id="form-register" method="POST">
+                    {% csrf_token %}
+                    {% for field in reg_form %}
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <div class="form-error">{{ error|escape }}</div>
+                        {% endfor %}
+                    {% endfor %}
                     <hr>
                     <button type="submit">Регистрация</button>
                 </form>
             </div>
         </div>
     </div>
+    <script>
+        if ('{{ reg_success }}'==='False') {
+            $('#modal-register').addClass('open');
+        }
+    </script>
 </header>

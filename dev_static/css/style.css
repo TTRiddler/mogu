@@ -14,6 +14,10 @@
     outline: none;
 }
 
+.d-none {
+    display: none;
+}
+
 a, a:visited {
     text-decoration: none;
     color: #00f;
@@ -73,25 +77,53 @@ header .row {
     align-items: center;
 }
 
-header .right-header a {
+header .right-header>a {
     display: inline-block;
     text-decoration: none;
     line-height: 34px;
 }
 
-header .right-header a:first-child {
+header .right-header>a:first-child {
     background-color: #00a0e3;
     color: #fff;
     padding: 0 11px;
 }
 
-header .right-header a:last-child {
+header .right-header>a:last-child {
     margin-left: 40px;
     color: #00a0e3;
 }
 
-header .user-name {
+header #user-name {
     margin-left: 40px;
+    text-transform: uppercase;
+    color: #333;
+}
+
+header .right-header {
+    position: relative;
+}
+
+header #profile-links {
+    position: absolute;
+    top: 40px;
+    right: -20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.08);
+    background-color: #fff;
+    padding: 20px 25px;
+    text-align: right;
+}
+
+header #profile-links a {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+header #profile-links hr {
+    border: none;
+    height: 1px;
+    background-color: #ccc;
+    margin: 15px 0;
 }
 
 /* FOOTER */
@@ -307,9 +339,14 @@ footer p {
     width: 400px;
     padding: 10px 13px;
     box-sizing: border-box;
-    margin-bottom: 20px;
+    margin-top: 20px;
     font-size: 1rem;
     background-color: #fff;
+}
+
+.modal .form-error {
+    color: red;
+    font-size: 0.8rem;
 }
 
 .modal .modalform hr {
@@ -479,7 +516,7 @@ footer p {
 }
 
 
-/* ADD AN */
+/* AN CREATE */
 #add_new_an {
     margin-top: 70px;
 }
@@ -495,14 +532,14 @@ footer p {
     padding-bottom: 10px;
 }
 
-#add_new_an input, #add_new_an textarea, #add_new_an select {
+#add_new_an input, #add_new_an select {
     width: 600px;
     font-size: 1rem;
     padding: 10px;
     box-sizing: border-box;
 }
 
-#add_new_an .price-add {
+#add_new_an .price-add, #cke_an_description {
     width: 600px;
 }
 
@@ -585,10 +622,123 @@ footer p {
 
 
 
+/* PROFILE */
+.profile {
+    margin-top: 70px;
+}
+
+.profile #user-photo {
+    margin-right: 20px;
+}
+
+.profile .profile-info h3 {
+    margin: 0;
+    font-weight: normal;
+    font-size: 1.3rem;
+    padding-bottom: 20px;
+}
+
+.profile .profile-info p {
+    padding-bottom: 10px;
+}
+
+.profile .profile-info a {
+    display: inline-block;
+    padding: 10px;
+    background-color: #00a0e3;
+    color: white;
+}
+
+#an-type-link {
+    margin-top: 20px;
+    background-color: #f0f0f0;
+    padding: 10px;
+}
+
+#an-type-link a {
+    color: #333;
+    font-size: 0.9rem;
+}
+
+#an-type-link .an-active-link {
+    color: blue;
+    font-size: 1.1rem;
+}
+
+#an-type-link .an-active-link:hover {
+    text-decoration: none;
+}
+
+.profile h3 {
+    margin-top: 50px;
+}
+
+.profile .an-item {
+    margin-top: 40px;
+    box-shadow: 0 5px 15px rgba(0,0,0,.08);
+    justify-content: space-between;
+}
+
+.profile .an-item>.row {
+    justify-content: space-between;
+}
+
+.an-item .user-an-info {
+    text-align: left;
+    padding: 5px 15px;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.an-item .user-an-info h4 {
+    margin-bottom: 10px;
+    font-weight: normal;
+    font-size: 1.1rem;
+}
+
+.an-item .user-an-info p span {
+    color: #777;
+}
+
+.an-item .user-an-info p {
+    margin: 10px 0;
+}
+
+.an-item .user-an-info .price {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.an-item .s-type {
+    display: inline-block;
+    background-color: #6ab73e;
+    color: #fff;
+    padding: 5px;
+}
+
+.an-item  .an-controls a {
+    margin-top: 5px;
+    display: block;
+    padding: 0 20px;
+    color: #333;
+    font-size: 0.9rem;
+    text-decoration: underline;
+}
+
+.an-item  .an-controls a:hover {
+    text-decoration: none;
+}
+
+.an-item  .an-controls {
+    padding-top: 50px;
+    background: #f0f0f0;
+}
 
 
-
-
+/* REGISTER */
+.register-messages h3 {
+    margin: 70px 0;
+}
 
 
 @media screen and (max-width: 992px) {
