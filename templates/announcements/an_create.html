@@ -10,12 +10,15 @@
 {% block content %}
     <script src="{% static 'js/ckeditor/ckeditor.js' %}"></script>
     <div class="container">
-        <form id="add_new_an" action="" method="post" enctype="multipart/form-data">
+        <form id="add_new_an" action="{% url 'an_create' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="row">
+                <p>Название объявления:</p>
+                <input required name="name" class="name" id="name-add" type="text">
+            </div>
+            <div class="row">
                 <p>Выберите категорию:</p>
-                <!-- <form action=""></form> -->
-                <select data-url="{% url 'service_choice' %}" name="select_service" id="select_service_type">
+                <select data-url="{% url 'service_choice' %}" name="select_service_type" id="select_service_type">
                     {% for service_type in service_types %}
                         <option value="{{ service_type.id }}">{{ service_type.name }}</option>
                     {% endfor %}
@@ -31,7 +34,7 @@
             </div>
             <div class="row">
                 <p>Описание объявления:</p>
-                <textarea id="an_description" cols="30" rows="10"></textarea>
+                <textarea name="description" id="an_description" cols="30" rows="10"></textarea>
                 <script>
                     CKEDITOR.replace( 'an_description' );
                 </script>
@@ -39,7 +42,7 @@
             <div class="row">
                 <p>Стоимость услуги:</p>
                 <div class="price-add">
-                    <input type="text" placeholder="Цена в &#8381;">
+                    <input required name="price" type="number" placeholder="Цена в &#8381;">
                 </div>
             </div>
             <div class="row">
@@ -48,24 +51,22 @@
                     <label class="label">
                         <i class="fa fa-upload"></i>
                         <span class="title">Выберите фотографии<br>(не больше 10)</span>
-                        <input type="file" multiple accept="image/gif,image/jpeg,image/png">
+                        <input required name="images" type="file" multiple accept="image/gif,image/jpeg,image/png">
                     </label>
-                    <div class="file-add-res">
-
-                    </div>
+                    <div class="file-add-res"></div>
                 </div>
             </div>
             <div class="row">
                 <p>Адресс:</p>
-                <input type="text">   
+                <input required name="address" type="text">   
             </div>
             <div class="row">
                 <p>Контактное лицо:</p>
-                <input type="text">
+                <input required name="contact" type="text">
             </div>
             <div class="row">
                 <p>Телефон:</p>
-                <input id="phone-add" type="text">
+                <input required name="phone" class="phone" id="phone-add" type="text">
             </div>
             <button type="submit">Разместить</button>
         </form>

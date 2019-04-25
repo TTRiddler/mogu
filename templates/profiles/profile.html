@@ -36,9 +36,9 @@
                             <div class="row">
                                 <div>
                                     <div class="row">
-                                        <img src="{{ an.get_main_image.image.url|resize:'200x160,C' }}" alt="service-photo">
+                                        <img src="{{ an.get_main_image.image.url|resize:'190x160,C' }}" alt="service-photo">
                                         <div class="user-an-info">
-                                            <h4><a href="#">{{ an.name|truncatechars:50 }}</a></h4>
+                                            <h4><a href="{% url 'an_detail' an.id %}">{{ an.name|truncatechars:50 }}</a></h4>
                                             <p class="price">{{ an.price }} &#8381;</p>
                                             <a class="s-type" href="#">{{ an.service.service_type.name }}</a>
                                             <p><span>{{ an.address }}</span></p>
@@ -60,7 +60,7 @@
                             <div class="row">
                                 <div>
                                     <div class="row">
-                                        <img src="{{ an.get_main_image.image.url|resize:'200x160,C' }}" alt="service-photo">
+                                        <img src="{{ an.get_main_image.image.url|resize:'190x160,C' }}" alt="service-photo">
                                         <div class="user-an-info">
                                             <h4><a href="#">{{ an.name|truncatechars:50 }}</a></h4>
                                             <p class="price">{{ an.price }} &#8381;</p>

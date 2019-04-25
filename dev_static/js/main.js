@@ -33,6 +33,12 @@ $( document ).ready(function() {
         $('#an-type-link .an-link-1').removeClass('an-active-link');
     });
 
+    $('.an_types_all>ul li i').click(function(){
+        $(this).siblings('ul').toggleClass('d-none');
+        $(this).toggleClass('fa-caret-right');
+        $(this).toggleClass('fa-caret-down');
+    });
+
     $('.slider-for').slick({
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -87,5 +93,29 @@ $( document ).ready(function() {
                 }  
             }
 		});
+    });
+
+
+    var ans = new Bloodhound({
+        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('q'),
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        prefetch:  'announcements/search.json?q=%QUERY',
+        remote: {
+            url: 'announcements/search.json?q=%QUERY',
+            wildcard: '%QUERY'
+        }
+    });
+
+    $('#multiple-datasets .typeahead').typeahead(
+    {
+        hint: true,
+        highlight: true,
+        minLength: 1,
+        limit: 10,
+    },
+    {
+        name: 'ans_list_search',
+        display: 'q',
+        source: ans
     });
 });

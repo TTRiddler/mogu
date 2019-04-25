@@ -151,7 +151,7 @@ footer p {
     color: #333;
 }
 
-.index-block img {
+.search-block img {
     width: 102px;
     height: 100%;
     margin-right: 10px;
@@ -176,6 +176,8 @@ footer p {
     font-size: 1rem;
     padding: 0 10px;
     border: 1px solid #9a9a9a;
+    border-left: none;
+    height: 40px;
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -193,6 +195,7 @@ footer p {
     color: #fff;
     border: 1px solid #f0506e;
     cursor: pointer;
+    height: 40px;
 }
 
 .search-block button:hover {
@@ -201,26 +204,17 @@ footer p {
 
 .services-list {
     margin-top: 50px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
 }
 
 
 .services-list img {
     width: 190px;
     height: 150px;
-    margin: 0;
-}
-
-.services-list .service-info {
-    width: 250px;
 }
 
 .service-item {
     margin-top: 30px;
     box-shadow: 0 5px 15px rgba(0,0,0,.08);
-    width: 440px;
 }
 
 .service-item .service-info {
@@ -235,19 +229,50 @@ footer p {
     margin-bottom: 10px;
     font-weight: normal;
     font-size: 1.1rem;
+    top: 10;
+    position: absolute;
+}
+
+.service-info  h3 a {
+    color: #00a0e3;
+}
+
+.service-info {
+    position: relative;
+    width: 350px;
+}
+
+.service-info .price {
+    position: absolute;
+    top: 40px;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.service-info .posted {
+    position: absolute;
+    bottom: 10px;
+}
+
+.s-type {
+    position: absolute;
+    bottom: 50px;
+    display: inline-block;
+    background-color: #6ab73e;
+    color: #fff;
+    padding: 5px;
+}
+
+.user-an-info .s-type {
+    position: static;
+}
+
+.s-type:visited {
+    color: #fff;
 }
 
 .service-item .service-info p span {
     color: #777;
-}
-
-.service-item .service-info p {
-    margin: 10px 0;
-}
-
-.service-item .service-info .price {
-    font-weight: bold;
-    font-size: 1rem;
 }
 
 /* MODAL */
@@ -412,6 +437,8 @@ footer p {
 .an-info h2 {
     font-size: 1.3rem;
     margin-bottom: 20px;
+    overflow: hidden;
+    width: 350px;
 }
 
 .an-info p {
@@ -709,12 +736,6 @@ footer p {
     font-size: 1rem;
 }
 
-.an-item .s-type {
-    display: inline-block;
-    background-color: #6ab73e;
-    color: #fff;
-    padding: 5px;
-}
 
 .an-item  .an-controls a {
     margin-top: 5px;
@@ -734,11 +755,133 @@ footer p {
     background: #f0f0f0;
 }
 
+.an-item  img {
+    width: 190px;
+}
+
 
 /* REGISTER */
 .register-messages h3 {
     margin: 70px 0;
 }
+
+
+/* SERVICE TYPE */
+.services_type .search-block {
+    margin-top: 70px;
+}
+
+.services_type h2 {
+    margin: 50px 0 0 0;
+}
+
+.an_types_all {
+    width: 250px;
+    margin-right: 20px;
+}
+
+.an_types_all ul {
+    list-style-type: none;
+}
+
+.an_types_all>ul li a {
+    display: inline-block;
+    margin-bottom: 5px;
+    margin-left: 15px;
+}
+
+.an_types_all a {
+    color: #00a0e3;
+    text-decoration: none;
+}
+
+.an_types_all>ul li {
+    position: relative;
+}
+
+.an_types_all i {
+    color: #ccc;
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+}
+
+.an_types_all a:hover {
+    color: red;
+}
+
+.an_types_all>ul li ul li {
+    padding-left: 30px;
+}
+
+.services-list .service-item {
+    margin: 0 0 30px 0;
+}
+
+/* TYPEAHEAD */
+.input-group.input-group-sm {
+    margin-bottom: 10px;
+}
+
+.tt-dataset.tt-dataset-ans_list_search,
+.tt-dataset.tt-dataset-service_types_list_search,
+.tt-dataset.tt-dataset-services_list_search {
+    color: #333;
+    background: #fff;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    text-align: left;
+}
+
+.tt-suggestion {
+    text-align: left;
+    padding: 3px 10px;
+    font-size: 1rem;
+}
+
+.typeahead {
+    outline: none;
+}
+.tt-menu {
+    max-height: 150px;
+    overflow-y: auto;
+}
+.tt-menu {
+    width: 513px;
+    border: 1px solid #9a9a9a;
+    border-top: none;
+    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-hint {
+    display: none;
+}
+
+.tt-highlight {
+    color: #333;
+}
+
+.tt-suggestion:hover {
+    cursor: pointer;
+    background-color: #e0e0e0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @media screen and (max-width: 992px) {
