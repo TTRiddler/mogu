@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from announcements.views import search_json
 
 
 admin.site.site_header = 'Mogu.su' 
@@ -13,6 +14,11 @@ urlpatterns = [
     path('', include('landing.urls')),
     path('announcements/', include('announcements.urls')),
     path('accounts/', include('profiles.urls')),
+
+    path('search.json', search_json, name='search_json'),
+    path('announcements/search_result/search.json', search_json, name='search_json'),
+    path('announcements/service_type/<service_type_id>/search.json', search_json, name='search_json'),
+    path('announcements/service/<service_id>/search.json', search_json, name='search_json'),
 ]
 
 

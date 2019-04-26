@@ -12,13 +12,17 @@
     <div class="services_type">
         <div class="container">
             <div class="search-block">
-                <form action="">
+                <form action="{% url 'search_result' %}" class="main-search" method="POST" autocomplete="off">
+                    {% csrf_token %}
                     <div class="row">
                         <img src="{% static 'images/logo.png' %}" alt="main-logo">
-                        <input id="main-search" type="text" placeholder="Объявлений на сайте: 0">
+                        <div id="multiple-datasets">
+                            {{ search_form.q }}
+                        </div>
                         <select name="city-select" id="city-select">
-                            <option value="1">Краснодар</option>
-                            <option value="1">Майкоп</option>
+                            {% for city in cities %}
+                                <option value="{{ city.id }}">{{ city.name }}</option>
+                            {% endfor %}
                         </select>
                         <button type="submit">Найти</button>
                     </div>
@@ -26,41 +30,6 @@
             </div>
             <h2>{{ service_type.name }}</h2>
             <div class="row">
-                <!-- <div class="an_types_all">
-                    <ul>
-                        {% for serv_type in service_types %}
-                            {% if serv_type != service_type %}
-                            <li>
-                                {% if serv_type.services.all %}
-                                    <i class="fa fa-caret-right"></i>
-                                {% else %}
-                                    <i></i>
-                                {% endif %}
-                                <a href="#">{{serv_type.name}}</a>
-                                <ul class="d-none">
-                                    {% for serv in serv_type.services.all %}
-                                        <li><a href="#">{{ serv.name }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                            {% else %}
-                            <li>
-                                {% if serv_type.services.all %}
-                                    <i class="fa fa-caret-down"></i>
-                                {% else %}
-                                    <i></i>
-                                {% endif %}
-                                <a href="#">{{serv_type.name}}</a>
-                                <ul>
-                                    {% for serv in serv_type.services.all %}
-                                        <li><a href="#">{{ serv.name }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
-                </div> -->
                 <div class="services-list">
                     {% for an in an_all %}
                         <div class="service-item">
@@ -69,6 +38,7 @@
                                 <div class="service-info">
                                     <h3><a href="{% url 'an_detail' an.id %}">{{ an.name|truncatechars:30 }}</a></h3>
                                     <p class="price">{{ an.price }} &#8381;</p>
+                                    <p class="city"><span>г. {{ an.city }}<span></p>
                                     <a class="s-type" href="{% url 'an_list' an.service.id %}">{{ an.service.name }}</a>
                                     <p class="posted"><span>{{ an.posted }}</span></p>
                                 </div>

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load imagefit %}
+
+
+{% block title %}
+    Результаты поиска
+{% endblock title %}
+
+
+{% block content %}
+    <div class="services_type">
+        <div class="container">
+            <div class="search-block">
+                <form action="{% url 'search_result' %}" class="main-search" method="POST" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="row">
+                        <img src="{% static 'images/logo.png' %}" alt="main-logo">
+                        <div id="multiple-datasets">
+                            {{ search_form.q }}
+                        </div>
+                        <select name="city-select" id="city-select">
+                            {% for city in cities %}
+                                <option value="{{ city.id }}">{{ city.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit">Найти</button>
+                    </div>
+                </form>
+            </div>
+            <h2>Результаты поиска</h2>
+            <div class="row">
+                <div class="services-list">
+                    {% for an in an_res %}
+                        <div class="service-item">
+                            <div class="row">   
+                                <img src="{{ an.images.first.image.url|resize:'190x150,C' }}" alt="an-photo">
+                                <div class="service-info">
+                                    <h3><a href="{% url 'an_detail' an.id %}">{{ an.name|truncatechars:30 }}</a></h3>
+                                    <p class="price">{{ an.price }} &#8381;</p>
+                                    <p class="city"><span>г. {{ an.city }}<span></p>
+                                    <a class="s-type" href="{% url 'an_type_list' an.service.service_type.id %}">{{ an.service.service_type.name }}</a>
+                                    <p class="posted"><span>{{ an.posted }}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

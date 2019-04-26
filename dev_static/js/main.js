@@ -99,9 +99,9 @@ $( document ).ready(function() {
     var ans = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('q'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,
-        prefetch:  'announcements/search.json?q=%QUERY',
+        prefetch:  'search.json?q=%QUERY',
         remote: {
-            url: 'announcements/search.json?q=%QUERY',
+            url: 'search.json?q=%QUERY',
             wildcard: '%QUERY'
         }
     });

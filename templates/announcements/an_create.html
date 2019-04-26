@@ -57,7 +57,15 @@
                 </div>
             </div>
             <div class="row">
-                <p>Адресс:</p>
+                <p>Город:</p>
+                <select name="city-select" id="city-select">
+                    {% for city in cities %}
+                        <option value="{{ city.id }}">{{ city.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row">
+                <p>Адрес:</p>
                 <input required name="address" type="text">   
             </div>
             <div class="row">

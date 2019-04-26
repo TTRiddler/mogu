@@ -237,6 +237,7 @@ footer p {
     color: #00a0e3;
 }
 
+
 .service-info {
     position: relative;
     width: 350px;
@@ -244,7 +245,7 @@ footer p {
 
 .service-info .price {
     position: absolute;
-    top: 40px;
+    top: 30px;
     font-weight: bold;
     font-size: 1rem;
 }
@@ -254,13 +255,18 @@ footer p {
     bottom: 10px;
 }
 
+.service-info  .city {
+    position: absolute;
+    bottom: 30px;
+}
+
 .s-type {
     position: absolute;
-    bottom: 50px;
+    top: 60px;
     display: inline-block;
     background-color: #6ab73e;
     color: #fff;
-    padding: 5px;
+    padding: 7px 10px 4px 10px;
 }
 
 .user-an-info .s-type {
@@ -273,6 +279,7 @@ footer p {
 
 .service-item .service-info p span {
     color: #777;
+    font-size: 0.8rem;
 }
 
 /* MODAL */

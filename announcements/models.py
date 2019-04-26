@@ -4,6 +4,18 @@ from ckeditor.fields import RichTextField
 from services.models import Service
 
 
+class City(models.Model):
+    name = models.CharField(max_length=250, verbose_name='Город')
+
+    class Meta:
+        verbose_name = 'Город'
+        verbose_name_plural = 'Города'
+        ordering = ['name']
+
+    def __str__(self):
+        return '%s' % self.name
+
+
 class Announcement(models.Model):
     name = models.CharField(max_length=250, verbose_name='Название')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Автор', related_name='announcements')
@@ -11,6 +23,9 @@ class Announcement(models.Model):
     price = models.PositiveIntegerField(verbose_name='Цена')
     posted = models.DateTimeField(auto_now_add=True, verbose_name='Размещено')
     views = models.PositiveSmallIntegerField(verbose_name='Просмотры', default=0)
+    views_today = models.PositiveSmallIntegerField(verbose_name='Просмотры сегодня', default=0)
+    today = models.DateField(verbose_name='Сегодня', auto_now_add=True)
+    city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name='Город', related_name='announcements')
     address = models.CharField(max_length=250, verbose_name='Адресс')
     contact = models.CharField(max_length=250, verbose_name='Контактное лицо')
     phone = models.CharField(max_length=250, verbose_name='Телефон')

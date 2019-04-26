@@ -35,7 +35,8 @@
                     <h2>{{ announcement.name }}</h2>
                     <p class="an-price">{{ announcement.price }} &#8381;</p>
                     <p><span>Размещено:</span> {{ announcement.posted }}</p>
-                    <p><span>Просмотры:</span> {{ announcement.views }}<span>, сегодня:</span> {{ announcement.views }}</p>
+                    <p><span>Просмотры:</span> {{ announcement.views }}<span>, сегодня:</span> {{ announcement.views_today }}</p>
+                    <p><span>Город:</span> {{ announcement.city }}</p>
                     <p><span>Адрес:</span> {{ announcement.address }}</p>
                     <a class="an-phone trigger-phone" href="#">Номер телефона</a>
                     <p class="an-user-name">{{ announcement.author.last_name }} {{ announcement.author.first_name }}</p>

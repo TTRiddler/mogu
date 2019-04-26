@@ -13,17 +13,17 @@
         <div class="container">
             <h2>Здесь люди, которые могут!</h2>
             <div class="search-block">
-                <form action="" class="main-search" method="POST" autocomplete="off">
+                <form action="{% url 'search_result' %}" class="main-search" method="POST" autocomplete="off">
                     {% csrf_token %}
                     <div class="row">
                         <img src="{% static 'images/logo.png' %}" alt="main-logo">
                         <div id="multiple-datasets">
-                            <!-- <input class="typeahead" id="main-search" type="text" placeholder="Объявлений на сайте: 0"> -->
                             {{ search_form.q }}
                         </div>
                         <select name="city-select" id="city-select">
-                            <option value="1">Краснодар</option>
-                            <option value="1">Майкоп</option>
+                            {% for city in cities %}
+                                <option value="{{ city.id }}">{{ city.name }}</option>
+                            {% endfor %}
                         </select>
                         <button type="submit">Найти</button>
                     </div>
@@ -40,6 +40,7 @@
                                 <div class="service-info">
                                     <h3><a href="{% url 'an_detail' an.id %}">{{ an.name|truncatechars:30 }}</a></h3>
                                     <p class="price">{{ an.price }} &#8381;</p>
+                                    <p class="city"><span>г. {{ an.city }}<span></p>
                                     <a class="s-type" href="{% url 'an_type_list' an.service.service_type.id %}">{{ an.service.service_type.name }}</a>
                                     <p class="posted"><span>{{ an.posted }}</span></p>
                                 </div>
