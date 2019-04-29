@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.conf import settings
 from ckeditor.fields import RichTextField
@@ -22,9 +24,10 @@ class Announcement(models.Model):
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name='Услуга', related_name='announcements')
     price = models.PositiveIntegerField(verbose_name='Цена')
     posted = models.DateTimeField(auto_now_add=True, verbose_name='Размещено')
+    can_edit = models.DateTimeField(verbose_name='Возможно редактирование до', null=True)
     views = models.PositiveSmallIntegerField(verbose_name='Просмотры', default=0)
     views_today = models.PositiveSmallIntegerField(verbose_name='Просмотры сегодня', default=0)
-    today = models.DateField(verbose_name='Сегодня', auto_now_add=True)
+    today = models.DateField(verbose_name='Сегодня', auto_now_add=True, null=True)
     city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name='Город', related_name='announcements')
     address = models.CharField(max_length=250, verbose_name='Адресс')
     contact = models.CharField(max_length=250, verbose_name='Контактное лицо')
@@ -39,6 +42,10 @@ class Announcement(models.Model):
 
     def get_main_image(self):
         return self.images.first()
+
+    def save(self, *args, **kwargs):
+        self.can_edit = self.posted + datetime.timedelta(days=1)
+        super(Announcement, self).save(*args, **kwargs)
 
     def __str__(self):
         return '%s - %s' % (self.name, self.author.username)

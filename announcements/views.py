@@ -189,9 +189,94 @@ class AddNewAn(View):
             city = city,
         )
 
+        Image.objects.filter(announcement=new_an).delete()
+
         for item in request.FILES.getlist('images'):
             Image.objects.create(
                 announcement = new_an,
+                image = item,
+            )
+
+        return redirect('profile')
+    
+
+def do_not_active(request):
+    an_id = request.GET.get('an_id')
+
+    an = Announcement.objects.get(id=int(an_id))
+
+    an.is_active = False
+    an.save()
+
+    return redirect('profile')
+
+
+def do_active(request):
+    an_id = request.GET.get('an_id')
+
+    an = Announcement.objects.get(id=int(an_id))
+
+    an.is_active = True
+    an.save()
+
+    return redirect('profile')
+
+
+class AnUpdate(View):
+    def get(self, request):
+        an_id = request.GET.get('an_id')
+
+        an = Announcement.objects.get(id=int(an_id))
+
+        service_types = ServiceType.objects.all()
+
+        service_type = an.service.service_type
+        services_start = Service.objects.filter(service_type=service_type)
+        service = an.service
+        cities = City.objects.all()
+        city = an.city
+
+        context = {
+            'an': an,
+            'service_types': service_types,
+            'service_type': service_type,
+            'services_start': services_start,
+            'cities': cities,
+            'city': city,
+            'service': service,
+        }
+
+        return render(request, 'announcements/edit.html', context)
+
+    def post(self, request):
+        id = request.POST.get('id')
+        author = request.user
+
+        an = get_object_or_404(
+            Announcement,
+            id = int(id),
+            author = author,
+        )
+
+        service_id = request.POST.get('select_service')
+        city_id = request.POST.get('city-select')
+
+        an.name = request.POST.get('name')
+        an.service = Service.objects.get(id=int(service_id))
+        an.price = int(request.POST.get('price'))
+        an.address = request.POST.get('address')
+        an.contact = request.POST.get('contact')
+        an.phone = request.POST.get('phone')
+        an.city = City.objects.get(id=int(city_id))
+        an.desc = request.POST.get('description')
+
+        an.save()
+
+        Image.objects.filter(announcement=an).delete()
+
+        for item in request.FILES.getlist('images'):
+            Image.objects.create(
+                announcement = an,
                 image = item,
             )
 

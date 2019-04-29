@@ -744,16 +744,20 @@ footer p {
 }
 
 
-.an-item  .an-controls a {
+.an-item  .an-controls button {
     margin-top: 5px;
+    cursor: pointer;
     display: block;
+    width: 100%;
     padding: 0 20px;
     color: #333;
     font-size: 0.9rem;
     text-decoration: underline;
+    border: none;
+    background-color: transparent;
 }
 
-.an-item  .an-controls a:hover {
+.an-item  .an-controls button:hover {
     text-decoration: none;
 }
 

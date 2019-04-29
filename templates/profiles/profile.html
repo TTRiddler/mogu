@@ -32,7 +32,7 @@
             <div class="an-list">
                 <div class="an-tab-1">
                     {% for an in active_ans %}
-                        <div class="an-item">
+                        <div class="an-item an-item-{{ an.id }}">
                             <div class="row">
                                 <div>
                                     <div class="row">
@@ -40,15 +40,21 @@
                                         <div class="user-an-info">
                                             <h4><a href="{% url 'an_detail' an.id %}">{{ an.name|truncatechars:50 }}</a></h4>
                                             <p class="price">{{ an.price }} &#8381;</p>
-                                            <a class="s-type" href="#">{{ an.service.service_type.name }}</a>
+                                            <a class="s-type" href="{% url 'an_type_list' an.service.service_type.id %}">{{ an.service.service_type.name }}</a>
                                             <p><span>{{ an.address }}</span></p>
                                             <p><span>{{ an.posted }}</span></p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="an-controls">
-                                    <a href="#">Редактировать</a>
-                                    <a href="#">Удалить в архив</a>
+                                    {% if an.can_edit > today %}
+                                        <form action="{% url 'edit' %}" method="GET">
+                                            <button name="an_id" value="{{ an.id }}">Редактировать</button>
+                                        </form>
+                                    {% endif %}
+                                    <form action="{% url 'do_not_active' %}" method="GET">
+                                        <button name="an_id" value="{{ an.id }}">Удалить в архив</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -62,17 +68,23 @@
                                     <div class="row">
                                         <img src="{{ an.get_main_image.image.url|resize:'190x160,C' }}" alt="service-photo">
                                         <div class="user-an-info">
-                                            <h4><a href="#">{{ an.name|truncatechars:50 }}</a></h4>
+                                            <h4><a href="{% url 'an_detail' an.id %}">{{ an.name|truncatechars:50 }}</a></h4>
                                             <p class="price">{{ an.price }} &#8381;</p>
-                                            <a class="s-type" href="#">{{ an.service.service_type.name }}</a>
+                                            <a class="s-type" href="{% url 'an_type_list' an.service.service_type.id %}">{{ an.service.service_type.name }}</a>
                                             <p><span>{{ an.address }}</span></p>
                                             <p><span>{{ an.posted }}</span></p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="an-controls">
-                                    <a href="#">Редактировать</a>
-                                    <a href="#">Сделать активным</a>
+                                    {% if an.can_edit > today %}
+                                        <form action="{% url 'edit' %}" method="GET">
+                                            <button name="an_id" value="{{ an.id }}">Редактировать</button>
+                                        </form>
+                                    {% endif %}
+                                    <form action="{% url 'do_active' %}" method="GET">
+                                        <button name="an_id" value="{{ an.id }}">Сделать активным</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

@@ -1,4 +1,6 @@
 import re
+from datetime import datetime
+import pytz
 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
@@ -23,9 +25,13 @@ def profile(request):
     active_ans = Announcement.objects.filter(author=user, is_active=True)
     not_active_ans = Announcement.objects.filter(author=user, is_active=False)
 
+    utc = pytz.UTC
+    today = utc.localize(datetime.today())
+
     context = {
         'active_ans': active_ans,
         'not_active_ans': not_active_ans,
+        'today': today,
     }
 
     return render(request, 'profiles/profile.html', context)

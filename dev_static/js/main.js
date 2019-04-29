@@ -95,7 +95,6 @@ $( document ).ready(function() {
 		});
     });
 
-
     var ans = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('q'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,

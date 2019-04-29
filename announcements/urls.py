@@ -10,4 +10,7 @@ urlpatterns = [
     path('service_type/<service_type_id>/', views.an_type_list, name='an_type_list'),
     path('service/<service_id>/', views.an_list, name='an_list'),
     path('search_result/', views.MainSerch.as_view(), name='search_result'),
+    path('do/not_active/', views.do_not_active, name='do_not_active'),
+    path('do/active/', views.do_active, name='do_active'),
+    path('edit/', login_required(views.AnUpdate.as_view()), name='edit'),
 ]

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load l10n %}
+
+
+{% block title %}
+    Размещение услуги
+{% endblock title %}
+
+
+{% block content %}
+    <script src="{% static 'js/ckeditor/ckeditor.js' %}"></script>
+    <div class="container">
+        <form id="add_new_an" action="{% url 'edit' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <p>Название объявления:</p>
+                <input value="{{ an.id }}" name="id" class="d-none" type="text">
+                <input required value="{{ an.name }}" name="name" class="name" id="name-add" type="text">
+            </div>
+            <div class="row">
+                <p>Выберите категорию:</p>
+                <select data-url="{% url 'service_choice' %}" name="select_service_type" id="select_service_type">
+                    {% for item in service_types %}
+                        {% if item == service_type %}
+                            <option selected value="{{ item.id }}">{{ item.name }}</option>
+                        {% else %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row">
+                <p>Выберите услугу:</p>
+                <select name="select_service" id="select_service">
+                    {% for item in services_start %}
+                        {% if item == service %}
+                            <option selected value="{{ item.id }}">{{ item.name }}</option>
+                        {% else %}
+                            <option value="{{ item.id }}">{{ item.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row">
+                <p>Описание объявления:</p>
+                <textarea name="description" id="an_description" cols="30" rows="10">
+                    {{ an.desc }}
+                </textarea>
+                <script>
+                    CKEDITOR.replace( 'an_description' );
+                </script>
+            </div>
+            <div class="row">
+                <p>Стоимость услуги:</p>
+                <div class="price-add">
+                    <input required min="0" value="{{ an.price|unlocalize }}" name="price" type="number" placeholder="Цена в &#8381;">
+                </div>
+            </div>
+            <div class="row">
+                <p>Фотографии:</p>
+                <div class="files-add">
+                    <label class="label">
+                        <i class="fa fa-upload"></i>
+                        <span class="title">Выберите фотографии<br>(не больше 10)</span>
+                        <input required name="images" type="file" multiple accept="image/gif,image/jpeg,image/png">
+                    </label>
+                    <div class="file-add-res">Обязательное поле</div>
+                </div>
+            </div>
+            <div class="row">
+                <p>Город:</p>
+                <select name="city-select" id="city-select">
+                    {% for city in cities %}
+                        <option value="{{ city.id }}">{{ city.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row">
+                <p>Адрес:</p>
+                <input required value="{{ an.address }}" name="address" type="text">   
+            </div>
+            <div class="row">
+                <p>Контактное лицо:</p>
+                <input required value="{{ an.contact }}" name="contact" type="text">
+            </div>
+            <div class="row">
+                <p>Телефон:</p>
+                <input required value="{{ an.phone }}" name="phone" class="phone" id="phone-add" type="text">
+            </div>
+            <button type="submit">Разместить</button>
+        </form>
+    </div>
+{% endblock content %}

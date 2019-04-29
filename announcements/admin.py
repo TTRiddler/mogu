@@ -21,15 +21,16 @@ class AnnouncementAdmin(admin.ModelAdmin):
             'fields': ('service', 'city', 'price', 'desc'),
         }),
         (None, {
-            'fields': ('posted', 'views', 'views_today', 'is_active'),
+            'fields': ('posted', 'views', 'views_today', 'can_edit', 'is_active'),
         }),
     )
-    list_display = ['id', 'name', 'service', 'contact', 'price', 'address', 'posted', 'phone', 'is_active']
+    list_display = ['id', 'name', 'service', 'contact', 'price', 'address', 'posted', 'can_edit', 'phone', 'is_active']
     list_display_links = ['name']
     list_filter = ['posted', 'is_active', 'city__name']
+    list_editable = ['is_active']
     search_fields = ['address', 'author__username', 'contact', 'name', 'price', 'phone', 'service__name']
     inlines = [ImageInline]
-    readonly_fields = ['views', 'views_today', 'posted']
+    readonly_fields = ['views', 'views_today', 'can_edit', 'posted']
 
 
 admin.site.register(City)
