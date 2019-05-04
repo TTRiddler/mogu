@@ -42,9 +42,15 @@
                     <p class="an-user-name">{{ announcement.author.last_name }} {{ announcement.author.first_name }}</p>
                     <p class="an-passport"><span>Паспорт надежности:</span> <i class="fa fa-star"></i> <span class="an-plus">+5</span>, <span class="an-minus">-3</span></p>
                     <p><span>Объявления пользователя:</span> 2</p>
-                    <form action="" class="add-to-favorite">
-                        <button type="submit"><i class="far fa-heart"></i> Добавить в избранное</button>
-                    </form>
+                    {% if not in_favorite %}
+                        <form action="{% url 'add_favorite' %}" class="add-to-favorite">
+                            <button name="an_id" value="{{ announcement.id }}" type="submit"><i class="far fa-heart"></i> Добавить в избранное</button>
+                        </form>
+                    {% else %}
+                        <div class="add-to-favorite">
+                            <a href="{% url 'favorites' %}"><i class="far fa-heart"></i> В избранных</a>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>

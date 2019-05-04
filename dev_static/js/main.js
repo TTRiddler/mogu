@@ -95,6 +95,14 @@ $( document ).ready(function() {
 		});
     });
 
+    $('#sort_by').change(function() {
+        $('.main-search').submit();
+    });
+
+    $('.val_price').on('blur', function() {
+        $('.main-search').submit();
+    });
+
     var ans = new Bloodhound({
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace('q'),
         queryTokenizer: Bloodhound.tokenizers.whitespace,

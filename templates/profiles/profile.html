@@ -40,7 +40,7 @@
                                         <div class="user-an-info">
                                             <h4><a href="{% url 'an_detail' an.id %}">{{ an.name|truncatechars:50 }}</a></h4>
                                             <p class="price">{{ an.price }} &#8381;</p>
-                                            <a class="s-type" href="{% url 'an_type_list' an.service.service_type.id %}">{{ an.service.service_type.name }}</a>
+                                            <a class="s-type" href="{% url 'search_result' %}?q={{ an.service.service_type.name }}&city-select={{ an.city.id }}&sort_by=3">{{ an.service.service_type.name }}</a>
                                             <p><span>{{ an.address }}</span></p>
                                             <p><span>{{ an.posted }}</span></p>
                                         </div>

@@ -7,6 +7,8 @@ from datetime import datetime
 from announcements.models import Announcement, Image, City
 from services.models import ServiceType, Service
 from announcements.forms import MainSearchForm
+from landing.pagination import pagination
+from profiles.models import FavoriteAn
 
 
 _eng_chars = u"~!@#$%^&qwertyuiop[]asdfghjkl;'zxcvbnm,./QWERTYUIOP{}ASDFGHJKL:\"|ZXCVBNM<>?"
@@ -29,8 +31,17 @@ def an_detail(request, an_id):
     announcement.views += 1
     announcement.save()
 
+    user = request.user
+    if FavoriteAn.objects.filter(user=user, announcement=announcement).exists():
+        in_favorite = True
+    else:
+        in_favorite = False
+    
+    print(in_favorite)
+
     context = {
         'announcement': announcement,
+        'in_favorite': in_favorite,
     }
 
     return render(request, 'announcements/an_detail.html', context)
@@ -54,72 +65,72 @@ def service_choice(request):
     return JsonResponse(context)
 
 
-def an_type_list(request, service_type_id):
-    search_form = MainSearchForm()
+def main_search(request):
+    search_form = MainSearchForm(request.GET)
+    q = request.GET.get('q', '')
 
-    service_type = ServiceType.objects.get(id=int(service_type_id))
-    service_types = ServiceType.objects.all()
+    q = fix_layout(q)
 
-    services = Service.objects.filter(service_type=service_type)
+    city_id = request.GET.get('city-select')
+    sort = request.GET.get('sort_by', '3')
 
-    an_all = Announcement.objects.filter(service__in=services, is_active=True)
+    city = City.objects.get(id=int(city_id))
+
+    an_res = Announcement.objects.filter(is_active=True)
+    an_res = an_res.filter(city=city)
+    an_res = an_res.filter(
+        Q(name__icontains=q) |
+        Q(service__name__icontains=q) |
+        Q(service__service_type__name__icontains=q) |
+        Q(desc__icontains=q)).order_by('-posted').distinct()
+
+    if sort == '1':
+        an_res = an_res.order_by('price')
+    if sort == '2':
+        an_res = an_res.order_by('-price')
 
     cities = City.objects.all()
 
+    min_price = request.GET.get('min_price')
+    max_price = request.GET.get('max_price')
+
+    an_res_prices = [an.price for an in an_res]
+
+    if min_price:
+        min_price = int(min_price)
+        an_res = [an for an in an_res if an.price>=int(min_price)]
+    else:
+        min_price = min(an_res_prices)
+
+    if max_price:
+        max_price = int(max_price)
+        an_res = [an for an in an_res if an.price<=int(max_price)]
+    else:
+        max_price = max(an_res_prices)
+
+    page_number = request.GET.get('page', 1)
+    pag_res = pagination(an_res, page_number)
+
+    request_get_string = ''
+    for request_get_keys in request.GET.keys():
+        if request_get_keys != 'page':
+            request_get_string +=  '&' + request_get_keys + '=' + request.GET.get(request_get_keys)
+    
     context = {
-        'service_type': service_type,
-        'an_all': an_all,
-        'service_types': service_types,
-        'cities': cities,
         'search_form': search_form,
-    }
-
-    return render(request, 'announcements/an_type_list.html', context)
-
-
-def an_list(request, service_id):
-    search_form = MainSearchForm()
-
-    service = Service.objects.get(id=int(service_id))
-
-    an_all = Announcement.objects.filter(service=service, is_active=True)
-    cities = City.objects.all()
-
-    context = {
-        'an_all': an_all,
-        'service': service,
         'cities': cities,
-        'search_form': search_form,
+        'city_id': city.id,
+        'request_get_string': request_get_string,
+        'sort': sort,
+        'min_price': min_price,
+        'max_price': max_price,
+
+        'page_object': pag_res['page'],
+        'is_paginated': pag_res['is_paginated'],
+        'next_url': pag_res['next_url'],
+        'prev_url': pag_res['prev_url'],
     }
-
-    return render(request, 'announcements/service_list.html', context)
-
-
-class MainSerch(View):
-    def post(self, request):
-        search_form = MainSearchForm(request.POST)
-        q = request.POST.get('q', '')
-
-        city_id = request.POST.get('city-select')
-
-        city = City.objects.get(id=int(city_id))
-
-        an_res = Announcement.objects.filter(is_active=True)
-        an_res = an_res.filter(city=city)
-        an_res = an_res.filter(
-            Q(name__icontains=q) |
-            Q(service__name__icontains=q) |
-            Q(service__service_type__name__icontains=q) |
-            Q(desc__icontains=q)).order_by('-posted').distinct()
-
-        cities = City.objects.all()
-
-        context = {
-            'search_form': search_form,
-            'an_res': an_res,
-            'cities': cities,
-        }
-        return render(request, 'announcements/search_result.html', context)
+    return render(request, 'announcements/search_result.html', context)
 
 
 def search_json(request, **kwargs):

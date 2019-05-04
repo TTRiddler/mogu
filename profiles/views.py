@@ -16,7 +16,7 @@ from django.contrib.sites.shortcuts import get_current_site
 
 from announcements.models import Announcement
 from profiles.forms import RegisterForm, LoginForm
-from profiles.models import User
+from profiles.models import User, FavoriteAn
 
 
 @login_required
@@ -121,6 +121,43 @@ def mylogin(request):
     return redirect('/')
 
 
+@login_required
 def mylogout(request):
     logout(request)
     return redirect('/')
+
+
+@login_required
+def favorites(request):
+    user = request.user
+    favorites = FavoriteAn.objects.filter(user=user)
+    ans = [an.announcement for an in favorites]
+
+    context = {
+        'ans': ans,
+    }
+
+    return render(request, 'profiles/favorites.html', context)
+
+
+@login_required
+def remove_favorite(request):
+    user = request.user
+    an_id = request.GET.get('an_id')
+    an = Announcement.objects.get(id=int(an_id))
+    
+    favorite = FavoriteAn.objects.get(user=user, announcement=an)
+    favorite.delete()
+
+    return redirect('favorites')
+
+
+@login_required
+def add_favorite(request):
+    user = request.user
+    an_id = request.GET.get('an_id')
+    an = Announcement.objects.get(id=int(an_id))
+    
+    favorite = FavoriteAn.objects.update_or_create(user=user, announcement=an)
+
+    return redirect('/announcements/detail/%s/' % an.id)

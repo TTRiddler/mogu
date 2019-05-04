@@ -11,35 +11,21 @@
 {% block content %}
     <div class="services_type">
         <div class="container">
-            <div class="search-block">
-                <form action="{% url 'search_result' %}" class="main-search" method="POST" autocomplete="off">
-                    {% csrf_token %}
-                    <div class="row">
-                        <img src="{% static 'images/logo.png' %}" alt="main-logo">
-                        <div id="multiple-datasets">
-                            {{ search_form.q }}
-                        </div>
-                        <select name="city-select" id="city-select">
-                            {% for city in cities %}
-                                <option value="{{ city.id }}">{{ city.name }}</option>
-                            {% endfor %}
-                        </select>
-                        <button type="submit">Найти</button>
-                    </div>
-                </form>
-            </div>
+
+            {% include 'search-block.html' %}
+
             <h2>Результаты поиска</h2>
             <div class="row">
                 <div class="services-list">
-                    {% for an in an_res %}
+                    {% for an in page_object.object_list %}
                         <div class="service-item">
                             <div class="row">   
                                 <img src="{{ an.images.first.image.url|resize:'190x150,C' }}" alt="an-photo">
                                 <div class="service-info">
                                     <h3><a href="{% url 'an_detail' an.id %}">{{ an.name|truncatechars:30 }}</a></h3>
                                     <p class="price">{{ an.price }} &#8381;</p>
-                                    <p class="city"><span>г. {{ an.city }}<span></p>
-                                    <a class="s-type" href="{% url 'an_type_list' an.service.service_type.id %}">{{ an.service.service_type.name }}</a>
+                                    <p class="city"><span>{{ an.address }}<span></p>
+                                    <a class="s-type" href="{% url 'search_result' %}?q={{ an.service.service_type.name }}&city-select={{ an.city.id }}&sort_by=3">{{ an.service.service_type.name }}</a>
                                     <p class="posted"><span>{{ an.posted }}</span></p>
                                 </div>
                             </div>
@@ -48,5 +34,34 @@
                 </div>
             </div>
         </div>
+
+        {% if is_paginated %}
+            <div class="container">
+                <div class="pagination">
+                    <div class="row">
+                        {% if page_object.number|add:'-3' in page_object.paginator.page_range %}
+                            <a href="?page=1{{ request_get_string }}">1</a></li>
+                        {% endif %}
+                        {% if page_object.number|add:'-4' in page_object.paginator.page_range %}
+                            <span>...</span>
+                        {% endif %}
+                        {% for n in page_object.paginator.page_range %}
+                            {% if page_object.number == n %}
+                                <a class="pag-active" href="?page={{ n }}{{ request_get_string }}">{{ n }}</a>
+                            {% elif n > page_object.number|add:'-3' and n < page_object.number|add:'3' %}
+                                <a href="?page={{ n }}{{ request_get_string }}">{{ n }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_object.number|add:'4' in page_object.paginator.page_range %}
+                            <span>...</span>
+                        {% endif %}
+                        {% if page_object.number|add:'3' in page_object.paginator.page_range %}
+                            <a href="?page={{ page_object.paginator.num_pages }}{{ request_get_string }}">{{ page_object.paginator.num_pages }}</a></li>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
     </div>
 {% endblock content %}

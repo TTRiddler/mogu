@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from announcements.models import Announcement
 
 
 class User(AbstractUser):
@@ -12,3 +13,15 @@ class User(AbstractUser):
         return 'images/profiles/%s' % filename
 
     photo = models.ImageField(null=True, blank=True, upload_to=get_picture_url, verbose_name='Фото')
+
+
+class FavoriteAn(models.Model):
+    announcement = models.ForeignKey(Announcement, on_delete=models.CASCADE, verbose_name='Объявление', related_name='favorites')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='favorites')
+
+    class Meta:
+        verbose_name = 'Связь'
+        verbose_name_plural = 'Список избранных'
+    
+    def __str__(self):
+        return '%s - %s %s' % (self.announcement.name, self.user.last_name, self.user.first_name)

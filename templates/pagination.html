@@ -1,0 +1,27 @@
+{% if is_paginated %}
+    <div class="container">
+        <div class="pagination">
+            <div class="row">
+                {% if page_object.number|add:'-3' in page_object.paginator.page_range %}
+                    <a href="?page=1">1</a></li>
+                {% endif %}
+                {% if page_object.number|add:'-4' in page_object.paginator.page_range %}
+                    <span>...</span>
+                {% endif %}
+                {% for n in page_object.paginator.page_range %}
+                    {% if page_object.number == n %}
+                        <a class="pag-active" href="?page={{ n }}">{{ n }}</a>
+                    {% elif n > page_object.number|add:'-3' and n < page_object.number|add:'3' %}
+                        <a href="?page={{ n }}">{{ n }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if page_object.number|add:'4' in page_object.paginator.page_range %}
+                    <span>...</span>
+                {% endif %}
+                {% if page_object.number|add:'3' in page_object.paginator.page_range %}
+                    <a href="?page={{ page_object.paginator.num_pages }}">{{ page_object.paginator.num_pages }}</a></li>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endif %}

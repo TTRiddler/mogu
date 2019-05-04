@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 from django.utils.translation import ugettext_lazy as _
-from profiles.models import User
+from profiles.models import User, FavoriteAn
 
 
 
@@ -17,3 +17,4 @@ class UserAdmin(UserAdmin):
 
 admin.site.register(User, UserAdmin)
 admin.site.unregister(Group)
+admin.site.register(FavoriteAn)

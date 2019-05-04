@@ -1,0 +1,48 @@
+{% load static %}
+{% load l10n %}
+
+<div class="search-block">
+    <form action="{% url 'search_result' %}" class="main-search" method="GET" autocomplete="off">
+        <div class="row">
+            <img src="{% static 'images/logo.png' %}" alt="main-logo">
+            <div>
+                <div id="multiple-datasets">
+                    {{ search_form.q }}
+                </div>
+                <select name="city-select" id="city-select">
+                    {% for city in cities %}
+                        {% if city.id == city_id %}
+                            <option value="{{ city.id }}" selected>{{ city.name }}</option>
+                        {% else %}
+                            <option value="{{ city.id }}">{{ city.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <button type="submit">Найти</button>
+            </div>
+        </div>
+        <div class="row filterform">
+            <p>Сортировать: </p>
+
+            <select name="sort_by" id="sort_by">
+                {% if sort == '1' or sort == None %}
+                    <option selected value="1">По возрастанию цены</option>
+                    <option value="2">По убыванию цены</option>
+                    <option value="3">По дате</option>
+                {% elif sort == '2' %}
+                    <option value="1">По возрастанию цены</option>
+                    <option selected value="2">По убыванию цены</option>
+                    <option value="3">По дате</option>
+                {% elif sort == '3' %}
+                    <option value="1">По возрастанию цены</option>
+                    <option value="2">По убыванию цены</option>
+                    <option selected value="3">По дате</option>
+                {% endif %}
+            </select>
+
+            <p>Цена:</p>
+            <input class="val_price" type="number" min="0" name="min_price" value="{{ min_price|unlocalize }}">
+            <input class="val_price" type="number" min="0" name="max_price" value="{{ max_price|unlocalize }}">
+        </div>
+    </form>
+</div>

@@ -167,16 +167,21 @@ footer p {
 }
 
 .search-block .row {
-    justify-content: center;    
+    justify-content: space-between;    
 }
 
-.search-block select {
+.search-block .row>div {
+    display: flex;   
+}
+
+.search-block #city-select {
     width: 160px;
     color: #777;
     font-size: 1rem;
     padding: 0 10px;
     border: 1px solid #9a9a9a;
     border-left: none;
+    border-right: none;
     height: 40px;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -184,7 +189,7 @@ footer p {
     background: url('../images/select_arrows.png') no-repeat 95% center;
 }
 
-.search-block select::-ms-expand {
+.search-block #city-select::-ms-expand {
     display: none;
 }
 
@@ -473,21 +478,26 @@ footer p {
     margin: 20px 0;
 }
 
-.add-to-favorite button {
+.add-to-favorite button,
+.add-to-favorite a {
     background-color: #ffffff;
     border: 1px solid #ccc;
     border-radius: 3px;
-    padding: 10px 20px;
+    padding: 10px 20px 7px 20px;
     cursor: pointer;
     width: 260px;
     font-size: 1rem;
+    color: #333;
+    text-decoration: none;
 }
 
-.add-to-favorite button:hover {
+.add-to-favorite button:hover,
+.add-to-favorite a:hover {
     background-color: #ccc;
 }
 
-.add-to-favorite button i {
+.add-to-favorite button i,
+.add-to-favorite a i {
     font-size: 1.1rem;
     padding-right: 10px;
     color: #d71e1f;
@@ -880,7 +890,60 @@ footer p {
 }
 
 
+.pagination .row {
+    justify-content: center;
+}
 
+.pagination .row a {
+    display: block;
+    padding: 10px 8px 5px 7px;
+    color: #333;
+    text-decoration: none;
+}
+
+.pagination .row span {
+    display: block;
+    padding: 10px 8px 5px 7px;
+    color: #777;
+}
+
+.pagination .row a:hover {
+    text-decoration: underline;
+}
+
+.pag-active {
+    background-color: #d71e1f;
+    color: #fff !important;
+}
+
+#sort_by {
+    background-color: #fff;
+    padding: 5px;
+}
+
+.filterform {
+    margin-top: 20px;
+    justify-content: start !important;
+    align-items: center
+}
+
+.filterform input{
+    margin-left: 10px;
+    width: 100px;
+    padding: 5px 10px;
+}
+
+.filterform select{
+    margin-right: 30px;
+}
+
+.filterform p {
+    padding-right: 10px;
+}
+
+.favorites {
+    margin-top: 70px;
+}
 
 
 

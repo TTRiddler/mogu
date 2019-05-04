@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load imagefit %}
+{% load l10n %}
 
 
 {% block title %}
@@ -13,27 +14,30 @@
         <div class="container">
             <h2>Здесь люди, которые могут!</h2>
             <div class="search-block">
-                <form action="{% url 'search_result' %}" class="main-search" method="POST" autocomplete="off">
-                    {% csrf_token %}
+                <form action="{% url 'search_result' %}" class="main-search" method="GET" autocomplete="off">
                     <div class="row">
                         <img src="{% static 'images/logo.png' %}" alt="main-logo">
-                        <div id="multiple-datasets">
-                            {{ search_form.q }}
+                        <div>
+                            <div id="multiple-datasets">
+                                {{ search_form.q }}
+                            </div>
+                            <select name="city-select" id="city-select">
+                                {% for city in cities %}
+                                    <option value="{{ city.id }}">{{ city.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Найти</button>
                         </div>
-                        <select name="city-select" id="city-select">
-                            {% for city in cities %}
-                                <option value="{{ city.id }}">{{ city.name }}</option>
-                            {% endfor %}
-                        </select>
-                        <button type="submit">Найти</button>
                     </div>
+                    <input type="text" class="d-none" name="sort_by" value="3">
                 </form>
             </div>
+
         </div>
         <div class="container">
             <div class="row">
                 <div class="services-list">
-                    {% for an in an_all %}
+                    {% for an in page_object.object_list %}
                         <div class="service-item">
                             <div class="row">   
                                 <img src="{{ an.get_main_image.image.url|resize:'200x160,C' }}" alt="service-photo">
@@ -41,7 +45,7 @@
                                     <h3><a href="{% url 'an_detail' an.id %}">{{ an.name|truncatechars:30 }}</a></h3>
                                     <p class="price">{{ an.price }} &#8381;</p>
                                     <p class="city"><span>г. {{ an.city }}<span></p>
-                                    <a class="s-type" href="{% url 'an_type_list' an.service.service_type.id %}">{{ an.service.service_type.name }}</a>
+                                    <a class="s-type" href="{% url 'search_result' %}?q={{ an.service.service_type.name }}&city-select={{ an.city.id }}&sort_by=3">{{ an.service.service_type.name }}</a>
                                     <p class="posted"><span>{{ an.posted }}</span></p>
                                 </div>
                             </div>
@@ -50,5 +54,8 @@
                 </div>
             </div>
         </div>
+
+        {% include 'pagination.html' %}
+
     </div>
 {% endblock content %}
