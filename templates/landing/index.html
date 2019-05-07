@@ -2,6 +2,7 @@
 {% load static %}
 {% load imagefit %}
 {% load l10n %}
+{% load humanize %}
 
 
 {% block title %}
@@ -46,7 +47,7 @@
                                     <p class="price">{{ an.price }} &#8381;</p>
                                     <p class="city"><span>г. {{ an.city }}<span></p>
                                     <a class="s-type" href="{% url 'search_result' %}?q={{ an.service.service_type.name }}&city-select={{ an.city.id }}&sort_by=3">{{ an.service.service_type.name }}</a>
-                                    <p class="posted"><span>{{ an.posted }}</span></p>
+                                    <p class="posted"><span>{{ an.posted|naturaltime }}</span></p>
                                 </div>
                             </div>
                         </div>

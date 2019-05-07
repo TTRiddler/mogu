@@ -1,13 +1,12 @@
 import re
-from datetime import datetime
-import pytz
 
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
-from profiles.tokens import account_activation_token
+from django.utils import timezone
+from django.views import View
 
 from django.contrib.auth import login, authenticate, logout
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from django.template.loader import render_to_string
@@ -16,25 +15,55 @@ from django.contrib.sites.shortcuts import get_current_site
 
 from announcements.models import Announcement
 from profiles.forms import RegisterForm, LoginForm
-from profiles.models import User, FavoriteAn
+from profiles.tokens import account_activation_token
+from profiles.models import User, FavoriteAn, Message, MessageType, MessageImage
+from landing.pagination import pagination
 
 
 @login_required
 def profile(request):
     user = request.user
     active_ans = Announcement.objects.filter(author=user, is_active=True)
-    not_active_ans = Announcement.objects.filter(author=user, is_active=False)
 
-    utc = pytz.UTC
-    today = utc.localize(datetime.today())
+    today = timezone.now()
+
+    page_number = request.GET.get('page', 1)
+    pag_res = pagination(active_ans, page_number)
 
     context = {
         'active_ans': active_ans,
-        'not_active_ans': not_active_ans,
         'today': today,
+
+        'page_object': pag_res['page'],
+        'is_paginated': pag_res['is_paginated'],
+        'next_url': pag_res['next_url'],
+        'prev_url': pag_res['prev_url'],
     }
 
     return render(request, 'profiles/profile.html', context)
+
+
+@login_required
+def profile2(request):
+    user = request.user
+    not_active_ans = Announcement.objects.filter(author=user, is_active=False)
+
+    today = timezone.now()
+    
+    page_number = request.GET.get('page', 1)
+    pag_res = pagination(not_active_ans, page_number)
+
+    context = {
+        'not_active_ans': not_active_ans,
+        'today': today,
+
+        'page_object': pag_res['page'],
+        'is_paginated': pag_res['is_paginated'],
+        'next_url': pag_res['next_url'],
+        'prev_url': pag_res['prev_url'],
+    }
+
+    return render(request, 'profiles/profile2.html', context)
 
 
 def register(request):
@@ -161,3 +190,88 @@ def add_favorite(request):
     favorite = FavoriteAn.objects.update_or_create(user=user, announcement=an)
 
     return redirect('/announcements/detail/%s/' % an.id)
+
+
+def passport(request, user_id):
+    some_user = get_object_or_404(User, id=int(user_id))
+
+    thanks_type = MessageType.objects.get(name__icontains='Благодарность')
+    complaints_type = MessageType.objects.get(name__icontains='Жалоба')
+    claims_type = MessageType.objects.get(name__icontains='Претензия')
+
+
+    thanks = Message.objects.filter(is_active=True, about=some_user, message_type=thanks_type)
+    complaints = Message.objects.filter(is_active=True, about=some_user, message_type=complaints_type)
+    claims = Message.objects.filter(is_active=True, about=some_user, message_type=claims_type)
+
+    context = {
+        'some_user': some_user,
+        'thanks': thanks,
+        'complaints': complaints,
+        'claims': claims,
+        'thanks_type': thanks_type,
+        'complaints_type': complaints_type,
+        'claims_type': claims_type,
+    }
+
+    return render(request, 'profiles/passport.html', context)
+
+
+def user_ans(request, user_id):
+    some_user = get_object_or_404(User, id=int(user_id))
+
+    ans = Announcement.objects.filter(is_active=True, author=some_user)
+
+    context = {
+        'ans': ans,
+        'some_user': some_user,
+    }
+
+    return render(request, 'profiles/user_ans.html', context)
+
+
+class MessageView(View):
+    def get(self, request):
+        message_type_id = request.GET.get('message_type_id')
+        about_id = request.GET.get('about_id')
+
+        message_type = MessageType.objects.get(id=int(message_type_id))
+        some_user = User.objects.get(id=int(about_id))
+
+        author = request.user
+        about = some_user
+
+        context = {
+            'message_type': message_type,
+            'author': author,
+            'about': about,
+        }
+
+        return render(request, 'profiles/add_message.html', context)
+
+    def post(self, request):
+        about_id = request.POST.get('about_id')
+        author_id = request.POST.get('author_id')
+        message_type_id = request.POST.get('message_type_id')
+        text = request.POST.get('text')
+
+        about = get_object_or_404(User, id=int(about_id))
+        author = get_object_or_404(User, id=int(author_id))
+        message_type = get_object_or_404(MessageType, id=int(message_type_id))
+
+        message = Message.objects.create(
+            message_type=message_type,
+            author=author,
+            about=about,
+            text=text,
+        )
+
+        MessageImage.objects.filter(message=message).delete()
+
+        for item in request.FILES.getlist('images'):
+            MessageImage.objects.create(
+                message = message,
+                image = item,
+            )
+
+        return redirect('/accounts/passport/%s/' % about_id)

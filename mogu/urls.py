@@ -14,6 +14,7 @@ urlpatterns = [
     path('', include('landing.urls')),
     path('announcements/', include('announcements.urls')),
     path('accounts/', include('profiles.urls')),
+    path('support/', include('support.urls')),
 
     path('search.json', search_json, name='search_json'),
     path('announcements/search_result/search.json', search_json, name='search_json'),

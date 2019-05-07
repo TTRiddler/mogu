@@ -1,9 +1,12 @@
+import locale
+
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.views import View
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from django.utils import timezone
 from announcements.models import Announcement, Image, City
 from services.models import ServiceType, Service
 from announcements.forms import MainSearchForm
@@ -36,12 +39,14 @@ def an_detail(request, an_id):
         in_favorite = True
     else:
         in_favorite = False
-    
-    print(in_favorite)
 
+    user_ans = Announcement.objects.filter(is_active=True, author=announcement.author)
+    user_an_count = len(user_ans)
+    
     context = {
         'announcement': announcement,
         'in_favorite': in_favorite,
+        'user_an_count': user_an_count,
     }
 
     return render(request, 'announcements/an_detail.html', context)
@@ -187,6 +192,7 @@ class AddNewAn(View):
         city_id = request.POST.get('city-select')
         city = City.objects.get(id=int(city_id))
         desc = request.POST.get('description')
+        can_edit = timezone.now() + datetime.timedelta(days=1)
 
         new_an = Announcement.objects.create(
             name = name,
@@ -198,6 +204,7 @@ class AddNewAn(View):
             phone = phone,
             desc = desc,
             city = city,
+            can_edit = can_edit,
         )
 
         Image.objects.filter(announcement=new_an).delete()
@@ -209,7 +216,7 @@ class AddNewAn(View):
             )
 
         return redirect('profile')
-    
+
 
 def do_not_active(request):
     an_id = request.GET.get('an_id')
@@ -219,7 +226,7 @@ def do_not_active(request):
     an.is_active = False
     an.save()
 
-    return redirect('profile')
+    return JsonResponse({})
 
 
 def do_active(request):
@@ -230,7 +237,25 @@ def do_active(request):
     an.is_active = True
     an.save()
 
-    return redirect('profile')
+    return JsonResponse({})
+
+
+def update(request):
+    an_id = request.GET.get('an_id')
+
+    an = Announcement.objects.get(id=int(an_id))
+    locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
+
+    if an.posted.date() < timezone.now().date():
+        an.posted = timezone.now()
+        an.save()
+    posted = an.posted.strftime("%d %b %Y г. %H:%M")
+
+    context = {
+        'posted': posted,
+    }
+
+    return JsonResponse(context)
 
 
 class AnUpdate(View):
@@ -280,6 +305,8 @@ class AnUpdate(View):
         an.phone = request.POST.get('phone')
         an.city = City.objects.get(id=int(city_id))
         an.desc = request.POST.get('description')
+        an.posted = timezone.now()
+        
 
         an.save()
 

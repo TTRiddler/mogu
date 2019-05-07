@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    Добавить {{ message_type }}
+{% endblock title %}
+
+
+{% block content %}
+    <div class="container">
+        <form id="add_new_an" action="{% url 'add_message' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="d-none">
+                <p>Тип сообщения:</p>
+                <input required value="{{ message_type.id }}" name="message_type_id" class="name" type="text">
+            </div>
+            <div class="d-none">
+                <p>От кого:</p>
+                <input required value="{{ author.id }}" name="author_id" class="name" type="text">
+            </div>
+            <div class="d-none">
+                <p>Кому:</p>
+                <input required value="{{ about.id }}" name="about_id" class="name" type="text">
+            </div>
+            <div class="row">
+                <p>Текст сообщения:</p>
+                <textarea name="text" id="an_description" rows="20"></textarea>
+            </div>
+            <div class="row">
+                <p>Фотографии:</p>
+                <div class="files-add">
+                    <label class="label">
+                        <i class="fa fa-upload"></i>
+                        <span class="title">Выберите фотографии<br>(не больше 10)</span>
+                        <input name="images" type="file" multiple accept="image/gif,image/jpeg,image/png">
+                    </label>
+                    <div class="file-add-res"></div>
+                </div>
+            </div>
+            <button type="submit">Добавить ({{ message_type }})</button>
+        </form>
+    </div>
+{% endblock content %}

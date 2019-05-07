@@ -19,20 +19,6 @@ $( document ).ready(function() {
         $('#profile-links').toggleClass('d-none');
     });
 
-    $('#an-type-link .an-link-1').click(function(){
-        $('.an-tab-1').fadeIn();
-        $('.an-tab-2').css('display','none');
-        $('#an-type-link .an-link-1').addClass('an-active-link');
-        $('#an-type-link .an-link-2').removeClass('an-active-link');
-    });
-
-    $('#an-type-link .an-link-2').click(function(){
-        $('.an-tab-2').fadeIn();
-        $('.an-tab-1').css('display','none');
-        $('#an-type-link .an-link-2').addClass('an-active-link');
-        $('#an-type-link .an-link-1').removeClass('an-active-link');
-    });
-
     $('.an_types_all>ul li i').click(function(){
         $(this).siblings('ul').toggleClass('d-none');
         $(this).toggleClass('fa-caret-right');
@@ -95,12 +81,86 @@ $( document ).ready(function() {
 		});
     });
 
+    $('#formdo_not_active button').on('click', function(e) {
+        e.preventDefault();
+
+        an_id = $(this).val();
+
+		data = {
+            an_id: an_id,
+        }
+
+		$.ajax({
+			type: "GET",
+			url: $('#formdo_not_active').attr('action'),
+            data: data,
+			success: function(data) {
+                $('.an-item-' + an_id).addClass('d-none');
+            }
+		});
+    });
+
+    $('#formdo_active button').on('click', function(e) {
+        e.preventDefault();
+
+        an_id = $(this).val();
+
+		data = {
+            an_id: an_id,
+        }
+
+		$.ajax({
+			type: "GET",
+			url: $('#formdo_active').attr('action'),
+            data: data,
+			success: function(data) {
+                $('.an-item-' + an_id).addClass('d-none');
+            }
+		});
+    });
+
+    $('#formupdate button').on('click', function(e) {
+        e.preventDefault();
+
+        an_id = $(this).val();
+
+		data = {
+            an_id: an_id,
+        }
+
+		$.ajax({
+			type: "GET",
+			url: $('#formupdate').attr('action'),
+            data: data,
+			success: function(data) {
+            }
+		});
+    });
+
     $('#sort_by').change(function() {
         $('.main-search').submit();
     });
 
     $('.val_price').on('blur', function() {
         $('.main-search').submit();
+    });
+
+    $('.thanks>p').on('click', function(){
+        $('.thanks-block').slideToggle();
+        $('.complaint-block').slideUp();
+        $('.claim-block').slideUp();
+    });
+
+    $('.complaint>p').on('click', function(){
+        $('.thanks-block').slideUp();
+        $('.complaint-block').slideToggle();
+        $('.claim-block').slideUp();
+    });
+
+    $('.claim>p').on('click', function(){
+        $('.thanks-block').slideUp();
+        $('.complaint-block').slideUp();
+        $('.claim-block').slideToggle();
     });
 
     var ans = new Bloodhound({

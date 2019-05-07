@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 from ckeditor.fields import RichTextField
 from services.models import Service
 
@@ -23,7 +24,8 @@ class Announcement(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Автор', related_name='announcements')
     service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name='Услуга', related_name='announcements')
     price = models.PositiveIntegerField(verbose_name='Цена')
-    posted = models.DateTimeField(auto_now_add=True, verbose_name='Размещено')
+    posted = models.DateTimeField(default=timezone.now, verbose_name='Размещено')
+    # created = models.DateTimeField(default=timezone.now, verbose_name='Создано')
     can_edit = models.DateTimeField(verbose_name='Возможно редактирование до', null=True)
     views = models.PositiveSmallIntegerField(verbose_name='Просмотры', default=0)
     views_today = models.PositiveSmallIntegerField(verbose_name='Просмотры сегодня', default=0)
@@ -42,10 +44,6 @@ class Announcement(models.Model):
 
     def get_main_image(self):
         return self.images.first()
-
-    def save(self, *args, **kwargs):
-        self.can_edit = self.posted + datetime.timedelta(days=1)
-        super(Announcement, self).save(*args, **kwargs)
 
     def __str__(self):
         return '%s - %s' % (self.name, self.author.username)

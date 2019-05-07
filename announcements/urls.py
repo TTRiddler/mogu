@@ -1,6 +1,6 @@
 from django.urls import path
-from announcements import views
 from django.contrib.auth.decorators import login_required
+from announcements import views
 
 
 urlpatterns = [
@@ -11,4 +11,5 @@ urlpatterns = [
     path('do/not_active/', views.do_not_active, name='do_not_active'),
     path('do/active/', views.do_active, name='do_active'),
     path('edit/', login_required(views.AnUpdate.as_view()), name='edit'),
+    path('update/', login_required(views.update), name='update'),
 ]

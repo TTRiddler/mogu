@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load imagefit %}
+
+
+{% block title %}
+    Паспорт надежности
+{% endblock title %}
+
+
+{% block content %}
+    <div class="profile">
+        <div class="container">
+            <h2 class="h-passport">Паспорт надёжности участника &laquo;Могу&raquo;</h2>
+            <div class="row">
+                {% if some_user.photo %}
+                    <img id="user-photo" src="{{ some_user.photo.url|resize:'200x200,C' }}" alt="user-photo">
+                {% else %}
+                    <img id="user-photo" style="opacity: 0.3;" src="{% static 'images/no_avatar.png' %}" alt="user-photo">
+                {% endif %}
+                <div class="profile-info">
+                    <h3>{{ some_user.last_name }} {{ some_user.first_name }} {{ some_user.patronymic }}</h3>
+                    <!-- <p class="an-passport"><span>Паспорт надежности:</span> <i class="fa fa-star"></i> <span class="an-plus">+5</span>, <span class="an-minus">-3</span></p> -->
+                    <p>Личный код: <span>{{ some_user.id }}</span></p>
+                    <p class="passport-star"><i class="fa fa-star"></i></p>
+                </div>
+            </div>
+            <div class="passport-info">
+                <p><b>Серая</b> звезда - означает, что администрация &laquo;Могу&raquo; не гарантирует, что данный аккаунт принадлежит именно этому лицу.</p>
+                <p><b>Зелёная</b> звезда - означает, что данный пользователь подтвердил свой аккаунт документально. Администрация &laquo;Могу&raquo; гарантирует, что данный аккаунт принадлежит именно этому лицу. (Для физ. лиц: заверенное нотариусом согласие на обработку персональных данных. Для юр. лиц: оплата с действующего расчётного счёта организации.)</p>
+                <p><b>Жёлтая</b> звезда - означает, что у данного пользователя имеется 3 или более жалоб от других участников &laquo;Могу&raquo;. (Жалоба - это конструктивное незначительное недовольство к данному  пользователю, выраженное в недобросовестном, некачественном и др. отношениях между заказчиком услуги и её исполнителем)</p>
+                <p><b>Красная</b> звезда - означает, что у данного пользователя имеется 1 или более претензий от других участников &laquo;Могу&raquo;. (Претензия - это значительное недовольство между заказчиком услуги и её исполнителем о не качественном исполнении своих обязательств между друг другом, подкрепленное какими либо доказательствами сотрудничества)</p>
+            </div>
+            <div class="passport-write">
+                <div class="message_type thanks row">
+                    <p>Благодарности: <span>{{ thanks|length }}</span></p>
+                    <form action="{% url 'add_message' %}">
+                        <input type="text" name="message_type_id" value="{{ thanks_type.id }}" class="d-none">
+                        <input type="text" name="about_id" value="{{ some_user.id }}" class="d-none">
+                        <button type="submit" href="{% url 'add_message' %}">Написать</button>
+                    </form>
+                    <div class="thanks-block d-none">
+                        {% for item in thanks %}
+                            <div class="row">
+                                <div><a href="{% url 'passport' item.author.id %}">{{ item.author.last_name }} {{ item.author.first_name }}</a></div>
+                                <div>
+                                    <div>{{ item.text }}</div>
+                                    <br>
+                                    <div>
+                                        {% for image in item.images.all %}
+                                            <a href=""><img src="{{ image.image.url|resize:'150x200' }}" alt="message_image"></a>
+                                        {% endfor%}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="message_type complaint row">
+                    <p>Жалобы: <span>{{ complaints|length }}</span></p>
+                    <form action="{% url 'add_message' %}">
+                        <input type="text" name="message_type_id" value="{{ complaints_type.id }}" class="d-none">
+                        <input type="text" name="about_id" value="{{ some_user.id }}" class="d-none">
+                        <button type="submit" href="{% url 'add_message' %}">Написать</button>
+                    </form>
+                    <div class="complaint-block d-none">
+                        {% for item in complaints %}
+                            <div class="row">
+                                <div><a href="{% url 'passport' item.author.id %}">{{ item.author.last_name }} {{ item.author.first_name }}</a></div>
+                                <div>
+                                    <div>{{ item.text }}</div>
+                                    <br>
+                                    <div>
+                                        {% for image in item.images.all %}
+                                            <a href="#"><img src="{{ image.image.url|resize:'150x200' }}" alt="message_image"></a>
+                                        {% endfor%}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="message_type claim row">
+                    <p>Претензии: <span>{{ claims|length }}</span></p>
+                    <form action="{% url 'add_message' %}">
+                        <input type="text" name="message_type_id" value="{{ claims_type.id }}" class="d-none">
+                        <input type="text" name="about_id" value="{{ some_user.id }}" class="d-none">
+                        <button type="submit" href="{% url 'add_message' %}">Написать</button>
+                    </form>
+                    <div class="claim-block d-none">
+                        {% for item in claims %}
+                            <div class="row">
+                                <div><a href="{% url 'passport' item.author.id %}">{{ item.author.last_name }} {{ item.author.first_name }}</a></div>
+                                <div>
+                                    <div>{{ item.text }}</div>
+                                    <br>
+                                    <div>
+                                        {% for image in item.images.all %}
+                                            <a href="#"><img src="{{ image.image.url|resize:'150x200' }}" alt="message_image"></a>
+                                        {% endfor%}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

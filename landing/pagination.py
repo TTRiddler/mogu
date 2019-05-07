@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 
 
 def pagination(queryset, page_number):
-    PRODUCT_PER_PAGE = 1
+    PRODUCT_PER_PAGE = 10
     paginator = Paginator(queryset, PRODUCT_PER_PAGE)
     page = paginator.get_page(page_number)
 

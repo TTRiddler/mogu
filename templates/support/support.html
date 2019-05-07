@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    Написать в тех. поддержку
+{% endblock title %}
+
+
+{% block content %}
+    <div class="container">
+        <h2 class="h-support">Сообщение в тех. поддержку</h2>
+        <form id="add_new_an" action="{% url 'message' %}" method="post">
+            {% csrf_token %}
+            <div class="row">
+                <p>Имя:</p>
+                <input required name="name"  class="name" type="text">
+            </div>
+            <div class="row">
+                <p>Почта:</p>
+                <input required name="email" class="name" type="email">
+            </div>
+            <div class="row">
+                <p>Сообщение:</p>
+                <textarea required name="message" rows="20"></textarea>
+            </div>
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+{% endblock content %}

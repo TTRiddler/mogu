@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load imagefit %}
+{% load humanize %}
+
+
+{% block title %}
+    Личный кабинет
+{% endblock title %}
+
+
+{% block content %}
+    <div class="profile">
+        <div class="container">
+            <div class="row">
+                {% if user.photo %}
+                    <img id="user-photo" src="{{ user.photo.url|resize:'200x200,C' }}" alt="user-photo">
+                {% else %}
+                    <img id="user-photo" style="opacity: 0.3;" src="{% static 'images/no_avatar.png' %}" alt="user-photo">
+                {% endif %}
+                <div class="profile-info">
+                    <h3>{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</h3>
+                    <p class="an-passport"><span>Паспорт надежности:</span> <i class="fa fa-star"></i> <span class="an-plus">+5</span>, <span class="an-minus">-3</span></p>
+                    <p>Личный код: <span>{{ user.id }}</span></p>
+                    <a href="{% url 'an_create' %}">Разместить услугу</a>
+                </div>
+            </div>
+            <h3>Мои объявления</h3>
+            <div id="an-type-link">
+                <a class="an-link-1" href="{% url 'profile' %}">Активные</a> / 
+                <a class="an-link-2 an-active-link" href="#">Архив</a>
+            </div>
+            <div class="an-list">
+                {% for an in page_object.object_list %}
+                    <div class="an-item an-item-{{ an.id }}">
+                        <div class="row">
+                            <div>
+                                <div class="row">
+                                    <img src="{{ an.get_main_image.image.url|resize:'190x160,C' }}" alt="service-photo">
+                                    <div class="user-an-info">
+                                        <h4><a href="{% url 'an_detail' an.id %}">{{ an.name|truncatechars:50 }}</a></h4>
+                                        <p class="price">{{ an.price }} &#8381;</p>
+                                        <a class="s-type" href="{% url 'search_result' %}?q={{ an.service.service_type.name }}&city-select={{ an.city.id }}&sort_by=3">{{ an.service.service_type.name }}</a>
+                                        <p><span>{{ an.address }}</span></p>
+                                        <p class="posted"><span>{{ an.posted|naturaltime }}</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="an-controls">
+                                {% if an.can_edit > today %}
+                                    <form id="formedit" action="{% url 'edit' %}" method="GET">
+                                        <button name="an_id" value="{{ an.id }}">Редактировать</button>
+                                    </form>
+                                {% endif %}
+                                <form  id="formdo_active" action="{% url 'do_active' %}" method="GET">
+                                    <button name="an_id" value="{{ an.id }}">Сделать активным</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% include 'pagination.html' %}
+    </div>
+{% endblock content %}
