@@ -32,6 +32,11 @@
                     </div>
                     <input type="text" class="d-none" name="sort_by" value="3">
                 </form>
+                <div class="index-categories-phones">
+                    {% for category in categories %}
+                        <a href="{% url 'search_result' %}?q={{ category.name }}&city-select=1&sort_by=3">{{ category.name }}</a>
+                    {% endfor %}
+                </div>
             </div>
 
         </div>

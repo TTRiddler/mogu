@@ -68,3 +68,12 @@ class LoginForm(forms.Form):
                 raise forms.ValidationError('Неправильный телефон или пароль.')
         except User.DoesNotExist:
             raise forms.ValidationError('Неправильный телефон или пароль.')
+
+
+class ProfileEditForm(forms.Form):
+    def __init__(self, user, *args, **kwargs):
+        super(ProfileEditForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'] = forms.CharField(required=True, label='Имя', widget=forms.TextInput(attrs={'placeholder': 'Имя', 'value': user.first_name}))
+        self.fields['last_name'] = forms.CharField(required=True, label='Фамилия', widget=forms.TextInput(attrs={'placeholder': 'Фамилия', 'value': user.last_name}))
+        self.fields['patronymic'] = forms.CharField(required=False, label='Отчество', widget=forms.TextInput(attrs={'placeholder': 'Отчество', 'value': user.patronymic}))
+        self.fields['photo'] = forms.ImageField(label='Фото', widget=forms.ClearableFileInput(attrs={'class': 'profile_photo_field'}))

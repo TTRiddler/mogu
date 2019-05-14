@@ -11,7 +11,7 @@ from announcements.models import Announcement, Image, City
 from services.models import ServiceType, Service
 from announcements.forms import MainSearchForm
 from landing.pagination import pagination
-from profiles.models import FavoriteAn
+from profiles.models import FavoriteAn, Message, MessageType
 
 
 _eng_chars = u"~!@#$%^&qwertyuiop[]asdfghjkl;'zxcvbnm,./QWERTYUIOP{}ASDFGHJKL:\"|ZXCVBNM<>?"
@@ -42,11 +42,27 @@ def an_detail(request, an_id):
 
     user_ans = Announcement.objects.filter(is_active=True, author=announcement.author)
     user_an_count = len(user_ans)
+
+    thanks_type = MessageType.objects.get(name__icontains='Благодарность')
+    complaints_type = MessageType.objects.get(name__icontains='Жалоба')
+    claims_type = MessageType.objects.get(name__icontains='Претензия')
+
+    thanks = Message.objects.filter(is_active=True, about=announcement.author, message_type=thanks_type)
+    complaints = Message.objects.filter(is_active=True, about=announcement.author, message_type=complaints_type)
+    claims = Message.objects.filter(is_active=True, about=announcement.author, message_type=claims_type)
+
+    thanks_len = len(thanks)
+    complaints_len = len(complaints)
+    claims_len = len(claims)
     
     context = {
         'announcement': announcement,
         'in_favorite': in_favorite,
         'user_an_count': user_an_count,
+
+        'thanks_len': thanks_len,
+        'complaints_len': complaints_len,
+        'claims_len': claims_len,
     }
 
     return render(request, 'announcements/an_detail.html', context)

@@ -3,9 +3,22 @@ from django.contrib.auth.models import AbstractUser
 from announcements.models import Announcement
 
 
+class StarColor(models.Model):
+    name = models.CharField(unique=True, max_length=250, verbose_name='Цвет')
+    color = models.CharField(max_length=250, verbose_name='Код цвета', default='#ffffff')
+
+    class Meta:
+        verbose_name = 'Цвет звезды'
+        verbose_name_plural = 'Цвета звезд'
+    
+    def __str__(self):
+        return '%s' % self.name
+
+
 class User(AbstractUser):
     patronymic = models.CharField(max_length=250, blank=True, null=True, verbose_name='Отчество')
     phone = models.CharField(null=True, blank=True, unique=True, max_length=250, verbose_name='Телефон')
+    star_color = models.ForeignKey(StarColor, on_delete=models.CASCADE, verbose_name='Цвет звезды', default=4, null=True, blank=True, related_name='users')
 
     def get_picture_url(self, filename):
         ext = filename.split('.')[-1]

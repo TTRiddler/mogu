@@ -1,0 +1,12 @@
+{% autoescape off %}
+    Новове сообщение в тех. поддержку на сайте http://{{ domain }}.
+
+    Информация о сообщении:
+
+    Имя пользователя: {{ sup_message.name }}
+
+    Почта: {{ sup_message.email }}
+
+    Сообщение: {{ sup_message.message }}
+
+{% endautoescape %}

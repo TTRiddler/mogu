@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    Редактирование профиля
+{% endblock title %}
+
+
+{% block content %}
+    <div class="container">
+        <form id="add_new_an" novalidate action="{% url 'profile_edit' %}" enctype="multipart/form-data" method="POST">
+            {% csrf_token %}
+            {% for field in profile_edit_form %}
+                <div class="row">
+                    <p>{{ field.label }}:</p>
+                    <div>
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <div class="form-error">{{ error|escape }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
+{% endblock content %}

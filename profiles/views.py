@@ -4,6 +4,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from django.utils import timezone
 from django.views import View
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 
 from django.contrib.auth import login, authenticate, logout
 from django.shortcuts import render, redirect, get_object_or_404
@@ -14,7 +15,7 @@ from django.core.mail import EmailMessage
 from django.contrib.sites.shortcuts import get_current_site
 
 from announcements.models import Announcement
-from profiles.forms import RegisterForm, LoginForm
+from profiles.forms import RegisterForm, LoginForm, ProfileEditForm
 from profiles.tokens import account_activation_token
 from profiles.models import User, FavoriteAn, Message, MessageType, MessageImage
 from landing.pagination import pagination
@@ -30,6 +31,18 @@ def profile(request):
     page_number = request.GET.get('page', 1)
     pag_res = pagination(active_ans, page_number)
 
+    thanks_type = MessageType.objects.get(name__icontains='Благодарность')
+    complaints_type = MessageType.objects.get(name__icontains='Жалоба')
+    claims_type = MessageType.objects.get(name__icontains='Претензия')
+
+    thanks = Message.objects.filter(is_active=True, about=user, message_type=thanks_type)
+    complaints = Message.objects.filter(is_active=True, about=user, message_type=complaints_type)
+    claims = Message.objects.filter(is_active=True, about=user, message_type=claims_type)
+
+    thanks_len = len(thanks)
+    complaints_len = len(complaints)
+    claims_len = len(claims)
+
     context = {
         'active_ans': active_ans,
         'today': today,
@@ -38,6 +51,10 @@ def profile(request):
         'is_paginated': pag_res['is_paginated'],
         'next_url': pag_res['next_url'],
         'prev_url': pag_res['prev_url'],
+
+        'thanks_len': thanks_len,
+        'complaints_len': complaints_len,
+        'claims_len': claims_len,
     }
 
     return render(request, 'profiles/profile.html', context)
@@ -53,6 +70,18 @@ def profile2(request):
     page_number = request.GET.get('page', 1)
     pag_res = pagination(not_active_ans, page_number)
 
+    thanks_type = MessageType.objects.get(name__icontains='Благодарность')
+    complaints_type = MessageType.objects.get(name__icontains='Жалоба')
+    claims_type = MessageType.objects.get(name__icontains='Претензия')
+
+    thanks = Message.objects.filter(is_active=True, about=user, message_type=thanks_type)
+    complaints = Message.objects.filter(is_active=True, about=user, message_type=complaints_type)
+    claims = Message.objects.filter(is_active=True, about=user, message_type=claims_type)
+
+    thanks_len = len(thanks)
+    complaints_len = len(complaints)
+    claims_len = len(claims)
+
     context = {
         'not_active_ans': not_active_ans,
         'today': today,
@@ -61,6 +90,10 @@ def profile2(request):
         'is_paginated': pag_res['is_paginated'],
         'next_url': pag_res['next_url'],
         'prev_url': pag_res['prev_url'],
+
+        'thanks_len': thanks_len,
+        'complaints_len': complaints_len,
+        'claims_len': claims_len,
     }
 
     return render(request, 'profiles/profile2.html', context)
@@ -275,3 +308,42 @@ class MessageView(View):
             )
 
         return redirect('/accounts/passport/%s/' % about_id)
+
+
+class ProfileEditView(View):
+    def get(self, request):
+        profile_edit_form = ProfileEditForm(user=request.user)
+
+        context = {
+            'profile_edit_form': profile_edit_form,
+        }
+
+        return render(request, 'profiles/profile_edit.html', context)
+
+    def post(self, request):
+        profile_edit_form = ProfileEditForm(request.user, request.POST, request.FILES)
+
+        if profile_edit_form.is_valid():
+            user = request.user
+            user.first_name = profile_edit_form.cleaned_data['first_name']
+            user.last_name = profile_edit_form.cleaned_data['last_name']
+            user.patronymic = profile_edit_form.cleaned_data['patronymic']
+            user.photo = profile_edit_form.cleaned_data['photo']
+            user.save()
+
+        return redirect('profile')
+
+
+class PasswordReset(PasswordResetView):
+    template_name = 'profiles/password_reset.html'
+
+class PasswordResetDone(PasswordResetDoneView):
+    template_name = 'profiles/password_reset_done.html'
+
+
+class PasswordResetConfirm(PasswordResetConfirmView):
+    template_name = 'profiles/password_reset_confirm.html'
+
+
+class PasswordResetComplete(PasswordResetCompleteView):
+    template_name = 'profiles/password_reset_complete.html'

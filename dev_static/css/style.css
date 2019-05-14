@@ -112,6 +112,7 @@ header #profile-links {
     background-color: #fff;
     padding: 20px 25px;
     text-align: right;
+    z-index: 1;
 }
 
 header #profile-links a {
@@ -797,7 +798,7 @@ footer p {
 
 
 /* REGISTER */
-.register-messages h3 {
+.register-messages div {
     margin: 70px 0;
 }
 
@@ -957,6 +958,7 @@ footer p {
 
 .filterform p {
     padding-right: 10px;
+    line-height: 29px;
 }
 
 .favorites {
@@ -982,8 +984,6 @@ footer p {
 .passport-star {
     margin-top: 20px;
     font-size: 2.5rem;
-    /* color: #d71e1f; */
-    color: #6ab73e;
 }
 
 .passport-write p {
@@ -1054,7 +1054,29 @@ footer p {
     width: 100%;
 }
 
+.profile_photo_field {
+    display: block !important;
+    pointer-events: auto !important;
+    cursor: pointer;
+}
 
+.reset_pswrd {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.left-header {
+    margin-right: 20px;
+}
+
+.main-link h1 {
+    line-height: 34px;
+}
+
+
+.index-categories-phones {
+    display: none;
+}
 
 
 
@@ -1062,6 +1084,166 @@ footer p {
 
 
 @media screen and (max-width: 992px) {
+    .index-block {
+        margin-top: 50px;
+    }
+
+    .index-block h2 {
+        display: none;
+    }
+
+    .index-block h2 {
+        display: none;
+    }
+
+    .search-block img {
+        margin: 0 auto 30px auto;
+    }
+
+    .search-block form>.row>div {
+        width: 100%;
+    }
+
+    #main-search {
+        width: calc(100vw - 340px);
+    }
+
+    .search-block button {
+        width: 100px;
+        box-sizing: border-box;
+        text-align: center;
+        padding: 0;
+    }
+
+    .filterform div:last-child {
+        margin-top: 20px;
+    }
+
+    .filterform .val_price {
+        margin: 0 10px 0 0;
+    }
+
+    #add_new_an>.row {
+        display: block;
+    }
+
+    #add_new_an input, #add_new_an select,  #cke_an_description, #add_new_an textarea {
+        width: 100%;
+    }
+
+    .an-images {
+        margin-bottom: 20px;
+        margin-right: 50px;
+    }
+
+    .an-info {
+        margin: 0;
+    }
 }
 
 
+@media screen and (max-width: 620px) {
+    #main-search {
+        width: calc(100vw - 20px);
+        margin-bottom: 10px;
+    }
+
+    .an-images {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .slider-for img {
+        width: 100%;
+        height: auto;
+    }
+
+    .search-block form>.row>div {
+        display: block;
+    }
+
+    .search-block select {
+        border: 1px solid #9a9a9a !important;
+    }
+
+    .container {
+        padding: 0 10px;
+    }
+
+    .service-item .service-info {
+        padding: 5px;
+        width: calc(100vw - 170px);
+        box-sizing: border-box;
+    }
+
+    .service-item .service-info h3 {
+       font-size: 0.9rem;
+    }
+
+    .service-item .row {
+        flex-wrap: nowrap;
+     }
+
+    .s-type {
+        display: none;
+    }
+
+    .services-list img {
+        width: 150px;
+        height: 118px;
+    }
+
+    .service-info .price {
+        top: 40px;
+    }
+
+    .modal {
+        width: 100vw;
+        left: 0;
+    }
+
+    .modalform input {
+        width: 100% !important;
+    }
+
+    .modal .if-not-reg {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .modalform {
+        padding: 10px;
+    }
+
+    #user-photo {
+        margin-bottom: 20px;
+    }
+
+    .an-item>.row {
+        display: block;
+    }
+
+    .an-item  .an-controls {
+        padding: 10px 0;
+    }
+    
+    .index-categories-phones {
+        display: flex;
+        flex-wrap: nowrap;
+        padding: 7px 0;
+        box-sizing: border-box;
+        overflow-x: scroll;
+    }
+
+    .index-categories-phones a {
+        display: block;
+        padding: 10px 20px 8px 20px;
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,.08), 0 0 2px 0 rgba(0,0,0,.04);
+        border-radius: 50px;
+        color: #00a0e3;
+        cursor: pointer;
+        margin: 10px 5px;
+        text-decoration: none;
+    }
+}

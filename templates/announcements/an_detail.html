@@ -41,7 +41,9 @@
                     <p><span>Адрес:</span> {{ announcement.address }}</p>
                     <a class="an-phone trigger-phone" href="#">Номер телефона</a>
                     <p class="an-user-name"><a href="{% url 'passport' announcement.author.id %}">{{ announcement.author.last_name }} {{ announcement.author.first_name }}</a></p>
-                    <p class="an-passport"><span>Паспорт надежности:</span><i class="fa fa-star"></i> <span title="Благодарности от других пользователей" class="an-plus">+5</span>, <span title="Претензии от других пользователей" class="an-minus">-3</span></p>
+                    <p class="an-passport"><span>Паспорт надежности:</span><i class="fa fa-star"></i> <span title="Благодарности от других пользователей" class="an-plus">Б({{ thanks_len }})</span>,
+                         <span title="Жалобы от других пользователей" class="an-yellow">Ж({{ complaints_len }})</span>,
+                         <span title="Претензии от других пользователей" class="an-minus">П({{ claims_len }})</span></p>
                     <p><span>Объявления пользователя:</span> <a href="{% url 'user_ans' announcement.author.id %}">{{ user_an_count }}</a></p>
                     {% if not in_favorite %}
                         <form action="{% url 'add_favorite' %}" class="add-to-favorite">

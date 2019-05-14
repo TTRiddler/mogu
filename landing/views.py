@@ -2,6 +2,7 @@ from django.shortcuts import render
 from announcements.models import Announcement, City
 from announcements.forms import MainSearchForm
 from landing.pagination import pagination
+from services.models import ServiceType
 
 
 def index(request):
@@ -12,10 +13,13 @@ def index(request):
     page_number = request.GET.get('page', 1)
     pag_res = pagination(an_all, page_number)
 
+    categories = ServiceType.objects.all()
+
     context = {
         'an_all': an_all,
         'search_form': search_form,
         'cities': cities,
+        'categories': categories,
 
         'page_object': pag_res['page'],
         'is_paginated': pag_res['is_paginated'],

@@ -130,11 +130,19 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'info@mogu.su'
+EMAIL_HOST_PASSWORD = 'jigorwabskdxulab'
 EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'goga23d@gmail.com'
-EMAIL_HOST_PASSWORD = 'khysaqitvdnqtneg'
+EMAIL_USE_SSL = False
+
+
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = 'goga23d@gmail.com'
+# EMAIL_HOST_PASSWORD = 'khysaqitvdnqtneg'
 
 
 CKEDITOR_CONFIGS = {

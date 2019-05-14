@@ -22,7 +22,7 @@
                     <h3>{{ some_user.last_name }} {{ some_user.first_name }} {{ some_user.patronymic }}</h3>
                     <!-- <p class="an-passport"><span>Паспорт надежности:</span> <i class="fa fa-star"></i> <span class="an-plus">+5</span>, <span class="an-minus">-3</span></p> -->
                     <p>Личный код: <span>{{ some_user.id }}</span></p>
-                    <p class="passport-star"><i class="fa fa-star"></i></p>
+                    <p class="passport-star"><i style="color: {{ some_user.star_color.color }};" class="fa fa-star"></i></p>
                 </div>
             </div>
             <div class="passport-info">
