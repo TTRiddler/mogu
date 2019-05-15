@@ -31,18 +31,6 @@ def profile(request):
     page_number = request.GET.get('page', 1)
     pag_res = pagination(active_ans, page_number)
 
-    thanks_type = MessageType.objects.get(name__icontains='Благодарность')
-    complaints_type = MessageType.objects.get(name__icontains='Жалоба')
-    claims_type = MessageType.objects.get(name__icontains='Претензия')
-
-    thanks = Message.objects.filter(is_active=True, about=user, message_type=thanks_type)
-    complaints = Message.objects.filter(is_active=True, about=user, message_type=complaints_type)
-    claims = Message.objects.filter(is_active=True, about=user, message_type=claims_type)
-
-    thanks_len = len(thanks)
-    complaints_len = len(complaints)
-    claims_len = len(claims)
-
     context = {
         'active_ans': active_ans,
         'today': today,
@@ -51,10 +39,6 @@ def profile(request):
         'is_paginated': pag_res['is_paginated'],
         'next_url': pag_res['next_url'],
         'prev_url': pag_res['prev_url'],
-
-        'thanks_len': thanks_len,
-        'complaints_len': complaints_len,
-        'claims_len': claims_len,
     }
 
     return render(request, 'profiles/profile.html', context)
@@ -70,18 +54,6 @@ def profile2(request):
     page_number = request.GET.get('page', 1)
     pag_res = pagination(not_active_ans, page_number)
 
-    thanks_type = MessageType.objects.get(name__icontains='Благодарность')
-    complaints_type = MessageType.objects.get(name__icontains='Жалоба')
-    claims_type = MessageType.objects.get(name__icontains='Претензия')
-
-    thanks = Message.objects.filter(is_active=True, about=user, message_type=thanks_type)
-    complaints = Message.objects.filter(is_active=True, about=user, message_type=complaints_type)
-    claims = Message.objects.filter(is_active=True, about=user, message_type=claims_type)
-
-    thanks_len = len(thanks)
-    complaints_len = len(complaints)
-    claims_len = len(claims)
-
     context = {
         'not_active_ans': not_active_ans,
         'today': today,
@@ -90,10 +62,6 @@ def profile2(request):
         'is_paginated': pag_res['is_paginated'],
         'next_url': pag_res['next_url'],
         'prev_url': pag_res['prev_url'],
-
-        'thanks_len': thanks_len,
-        'complaints_len': complaints_len,
-        'claims_len': claims_len,
     }
 
     return render(request, 'profiles/profile2.html', context)
@@ -232,7 +200,6 @@ def passport(request, user_id):
     complaints_type = MessageType.objects.get(name__icontains='Жалоба')
     claims_type = MessageType.objects.get(name__icontains='Претензия')
 
-
     thanks = Message.objects.filter(is_active=True, about=some_user, message_type=thanks_type)
     complaints = Message.objects.filter(is_active=True, about=some_user, message_type=complaints_type)
     claims = Message.objects.filter(is_active=True, about=some_user, message_type=claims_type)
@@ -306,7 +273,7 @@ class MessageView(View):
                 message = message,
                 image = item,
             )
-
+        
         return redirect('/accounts/passport/%s/' % about_id)
 
 

@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 from announcements.models import Announcement
 
 
@@ -18,14 +20,23 @@ class StarColor(models.Model):
 class User(AbstractUser):
     patronymic = models.CharField(max_length=250, blank=True, null=True, verbose_name='Отчество')
     phone = models.CharField(null=True, blank=True, unique=True, max_length=250, verbose_name='Телефон')
+    is_verified = models.BooleanField(default=False, verbose_name='Пользователь подтвержден')
     star_color = models.ForeignKey(StarColor, on_delete=models.CASCADE, verbose_name='Цвет звезды', default=4, null=True, blank=True, related_name='users')
+    thanks = models.PositiveIntegerField(default=0, verbose_name='Благодарности', blank=True, null=True)
+    complaints = models.PositiveIntegerField(default=0, verbose_name='Жалобы', blank=True, null=True)
+    claims = models.PositiveIntegerField(default=0, verbose_name='Претензии', blank=True, null=True)
 
     def get_picture_url(self, filename):
         ext = filename.split('.')[-1]
         filename = '%s.%s' % (self.id, ext)
         return 'images/profiles/%s' % filename
-
+    
     photo = models.ImageField(null=True, blank=True, upload_to=get_picture_url, verbose_name='Фото')
+
+    def save(self, *args, **kwargs):
+        if self.is_verified and self.star_color == StarColor.objects.get(id=4):
+            self.star_color = StarColor.objects.get(id=1)
+        super(User, self).save(*args, **kwargs)
 
 
 class FavoriteAn(models.Model):
@@ -62,8 +73,64 @@ class Message(models.Model):
         verbose_name = 'Сообщение'
         verbose_name_plural = 'Сообщения'
     
+    def delete(self):
+        self.about.save()
+        super(Message, self).delete()
+    
     def __str__(self):
         return '%s %s для %s %s' % (self.author.last_name, self.author.first_name, self.about.last_name, self.about.first_name)
+
+
+@receiver(post_save, sender=Message)
+def update_messages_save(sender, instance, **kwargs):
+    thanks_type = MessageType.objects.get(name__icontains='Благодарность')
+    complaints_type = MessageType.objects.get(name__icontains='Жалоба')
+    claims_type = MessageType.objects.get(name__icontains='Претензия')
+
+    thanks = Message.objects.filter(is_active=True, about=instance.about, message_type=thanks_type)
+    complaints = Message.objects.filter(is_active=True, about=instance.about, message_type=complaints_type)
+    claims = Message.objects.filter(is_active=True, about=instance.about, message_type=claims_type)
+
+    instance.about.thanks = len(thanks)
+    instance.about.complaints = len(complaints)
+    instance.about.claims = len(claims)
+    
+    if instance.about.is_verified:
+        instance.about.star_color = StarColor.objects.get(id=1)
+    else:
+        instance.about.star_color = StarColor.objects.get(id=4)
+    if len(complaints) >= 3:
+        instance.about.star_color = StarColor.objects.get(id=2)
+    if len(claims) >= 1:
+        instance.about.star_color = StarColor.objects.get(id=3)
+    
+    instance.about.save()
+
+
+@receiver(post_delete, sender=Message)
+def update_messages_delete(sender, instance, **kwargs):
+    thanks_type = MessageType.objects.get(name__icontains='Благодарность')
+    complaints_type = MessageType.objects.get(name__icontains='Жалоба')
+    claims_type = MessageType.objects.get(name__icontains='Претензия')
+
+    thanks = Message.objects.filter(is_active=True, about=instance.about, message_type=thanks_type)
+    complaints = Message.objects.filter(is_active=True, about=instance.about, message_type=complaints_type)
+    claims = Message.objects.filter(is_active=True, about=instance.about, message_type=claims_type)
+
+    instance.about.thanks = len(thanks)
+    instance.about.complaints = len(complaints)
+    instance.about.claims = len(claims)
+
+    if instance.about.is_verified:
+        instance.about.star_color = StarColor.objects.get(id=1)
+    else:
+        instance.about.star_color = StarColor.objects.get(id=4)
+    if len(complaints) >= 3:
+        instance.about.star_color = StarColor.objects.get(id=2)
+    if len(claims) >= 1:
+        instance.about.star_color = StarColor.objects.get(id=3)
+
+    instance.about.save()
 
 
 class MessageImage(models.Model):

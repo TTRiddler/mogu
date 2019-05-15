@@ -15,7 +15,7 @@
                     <div class="d-none" id="profile-links">
                         <a href="{% url 'profile' %}">Личный кабинет</a><br><br>
                         <a href="{% url 'profile_edit' %}">Редактировать</a><br><br>
-                        <a href="{% url 'passport' user.id %}">Паспорт надежности</a><br><br>
+                        <a onclick= "window.open(this.href, 'MsgWindow', 'height=700, width=900'); return false" href="{% url 'passport' user.id %}">Паспорт надежности</a><br><br>
                         <a href="{% url 'favorites' %}">Избранное</a>
                         <hr>
                         <a href="{% url 'logout' %}">Выйти</a>

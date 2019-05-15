@@ -20,9 +20,9 @@
                 {% endif %}
                 <div class="profile-info">
                     <h3>{{ user.last_name }} {{ user.first_name }} {{ user.patronymic }}</h3>
-                    <p class="an-passport"><span>Паспорт надежности:</span><i class="fa fa-star"></i> <span title="Благодарности от других пользователей" class="an-plus">Б({{ thanks_len }})</span>,
-                        <span title="Жалобы от других пользователей" class="an-yellow">Ж({{ complaints_len }})</span>,
-                        <span title="Претензии от других пользователей" class="an-minus">П({{ claims_len }})</span></p>
+                    <p class="an-passport"><span>Паспорт надежности:</span><i style="color: {{ user.star_color.color }};" class="fa fa-star"></i> <span title="Благодарности от других пользователей" class="an-plus">Б({{ user.thanks }})</span>,
+                        <span title="Жалобы от других пользователей" class="an-yellow">Ж({{ user.complaints }})</span>,
+                        <span title="Претензии от других пользователей" class="an-minus">П({{ user.claims }})</span></p>
                     <p>Личный код: <span>{{ user.id }}</span></p>
                     <a href="{% url 'an_create' %}">Разместить услугу</a>
                 </div>
